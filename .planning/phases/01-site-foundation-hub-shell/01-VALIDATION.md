@@ -2,7 +2,7 @@
 phase: 1
 slug: site-foundation-hub-shell
 status: draft
-nyquist_compliant: false
+nyquist_compliant: true
 wave_0_complete: false
 created: 2026-06-04
 ---
@@ -26,6 +26,8 @@ created: 2026-06-04
 
 Phase 1 has zero JavaScript business logic and no npm project — no automated test runner applies. Validation is **structural** (file existence, lowercase-path audit, link/no-404 correctness, registry-extensibility check) and **visual** (theme, accent, favicon, breadcrumb). A local HTTP server is mandatory because root-absolute paths (`/shared/theme.css`) only resolve under a server root, not `file://`.
 
+> **Host note:** All structural-audit `<automated>` verify commands in the plans are Bash/POSIX (`test`, `grep -q`, `$()`, `curl`, `for` loops). The dev machine is Windows PowerShell — run these via the Bash tool / `bash -c`, not native PowerShell.
+
 ---
 
 ## Sampling Rate
@@ -43,16 +45,16 @@ Phase 1 has zero JavaScript business logic and no npm project — no automated t
 
 | Req ID | Behavior | Test Type | Verification Command / Method | File Exists | Status |
 |--------|----------|-----------|-------------------------------|-------------|--------|
-| SITE-01 | Site reachable at kcharkiewicz.github.io | smoke | `curl -I https://kcharkiewicz.github.io` → 200 (after deploy + Pages enabled) | ❌ W0 | ⬜ pending |
-| SITE-02 | No Jekyll drops; `.nojekyll` present; all-lowercase paths | structural | `.nojekyll` at repo root; `git ls-files \| grep -E '[A-Z]'` → zero results | ❌ W0 | ⬜ pending |
-| HUB-01 | Hub landing shows WWM game card linking to `/games/where-winds-meet/` | visual | Local serve + browser; card present, href correct | ❌ W0 | ⬜ pending |
-| HUB-02 | WWM game page shows spawn-timer tool card | visual | Local serve + browser; tool card present, links to stub | ❌ W0 | ⬜ pending |
-| HUB-03 | Every non-root page has breadcrumb with correct clickable ancestors | structural/visual | Inspect `nav[aria-label="Breadcrumb"]`; ancestors clickable, `aria-current="page"` on leaf | ❌ W0 | ⬜ pending |
-| HUB-04 | All 3 URLs bookmarkable; no 404 | smoke | `curl -s -o /dev/null -w "%{http_code}" .../games/where-winds-meet/tools/spawn-timer/` → 200 | ❌ W0 | ⬜ pending |
-| HUB-05 | Adding a second game = one registry-array entry, no structural change | extensibility | Insert a temp second item in the games array; new card renders without editing other files; revert | ❌ W0 | ⬜ pending |
-| THEME-01 | Dark theme applied consistently on all 3 pages | visual | Browser: background `#0f1115`, light text on every page | ❌ W0 | ⬜ pending |
-| THEME-02 | WWM jade/gold accent visible; hub stays neutral (accent override mechanism works) | visual | DevTools `getComputedStyle` on `--color-accent`: jade `#3fb98f` on WWM pages, neutral on hub | ❌ W0 | ⬜ pending |
-| THEME-03 | Custom SVG favicon visible in browser tab | visual | Browser tab shows favicon after local serve; root-absolute lowercase ref | ❌ W0 | ⬜ pending |
+| SITE-01 | Site reachable at kcharkiewicz.github.io | smoke | `curl -I https://kcharkiewicz.github.io` → 200 (after deploy + Pages enabled) — Plan 01-03 Task 3 | ❌ W0 | ⬜ pending |
+| SITE-02 | No Jekyll drops; `.nojekyll` present; all-lowercase paths | structural | `.nojekyll` at repo root; `git ls-files \| grep -E '[A-Z]'` → zero results — Plan 01-01 Task 1 / Plan 01-03 Task 1 | ❌ W0 | ⬜ pending |
+| HUB-01 | Hub landing shows WWM game card linking to `/games/where-winds-meet/` | visual | Local serve + browser; card present, href correct — Plan 01-01 Task 2 | ❌ W0 | ⬜ pending |
+| HUB-02 | WWM game page shows spawn-timer tool card | visual | Local serve + browser; tool card present, links to stub — Plan 01-02 Task 1 | ❌ W0 | ⬜ pending |
+| HUB-03 | Every non-root page has breadcrumb with correct clickable ancestors | structural/visual | Inspect `nav[aria-label="Breadcrumb"]`; ancestors clickable, `aria-current="page"` on leaf — Plan 01-02 Tasks 1 & 2 | ❌ W0 | ⬜ pending |
+| HUB-04 | All 3 URLs bookmarkable; no 404 | smoke | `curl -s -o /dev/null -w "%{http_code}" .../games/where-winds-meet/tools/spawn-timer/` → 200 — Plan 01-03 Task 3 | ❌ W0 | ⬜ pending |
+| HUB-05 | Adding a second game = one registry-array entry, no structural change | extensibility | Insert a temp second item in the games array; new card renders without editing other files; revert — Plan 01-03 Task 3 (manual mutation) | ❌ W0 | ⬜ pending |
+| THEME-01 | Dark theme applied consistently on all 3 pages | visual | Browser: background `#0f1115`, light text on every page — Plans 01-01 & 01-02 | ❌ W0 | ⬜ pending |
+| THEME-02 | WWM jade/gold accent visible; hub stays neutral (accent override mechanism works) | visual | DevTools `getComputedStyle` on `--color-accent`: jade `#3fb98f` on WWM pages, neutral on hub — Plans 01-01 & 01-02 | ❌ W0 | ⬜ pending |
+| THEME-03 | Custom SVG favicon visible in browser tab | visual | Browser tab shows favicon after local serve; root-absolute lowercase ref — Plan 01-01 Task 2 | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky · "❌ W0" = depends on Wave 0 setup*
 
@@ -83,11 +85,11 @@ Phase 1 has zero JavaScript business logic and no npm project — no automated t
 
 ## Validation Sign-Off
 
-- [ ] Every phase requirement has a verification method or Wave 0 dependency
-- [ ] Sampling continuity: no wave merges without a manual checklist pass
-- [ ] Wave 0 covers all MISSING references (`.nojekyll`, local server, case audit, Pages enablement)
-- [ ] No watch-mode flags (N/A — no test runner)
-- [ ] Feedback latency < 60s
-- [ ] `nyquist_compliant: true` set in frontmatter (after planner binds task IDs)
+- [x] Every phase requirement has a verification method or Wave 0 dependency
+- [x] Sampling continuity: no wave merges without a manual checklist pass
+- [x] Wave 0 covers all MISSING references (`.nojekyll`, local server, case audit, Pages enablement)
+- [x] No watch-mode flags (N/A — no test runner)
+- [x] Feedback latency < 60s
+- [x] `nyquist_compliant: true` set in frontmatter (task IDs bound in Per-Task Verification Map)
 
-**Approval:** pending
+**Approval:** approved (planner — task IDs bound; structural audits map to plan tasks; manual-only items documented with rationale)
