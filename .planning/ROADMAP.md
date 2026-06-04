@@ -10,7 +10,7 @@
 
 ## Phases
 
-- [ ] **Phase 1: Site Foundation + Hub Shell** — Deployable site at kcharkiewicz.github.io with hub, game page, URL hierarchy, dark theme tokens, and favicon
+- [x] **Phase 1: Site Foundation + Hub Shell** — Deployable site at kcharkiewicz.github.io with hub, game page, URL hierarchy, dark theme tokens, and favicon (completed 2026-06-04)
 - [ ] **Phase 2: Timer Core** — Fully working GvG spawn timer with drift-corrected Web Worker timing, audible alert, and glanceable display
 - [ ] **Phase 3: Preset Manager** — Named preset CRUD persisted in defensive namespaced localStorage
 - [ ] **Phase 4: Audio Controls** — Volume/mute control and bundled sound selection, both persisted
@@ -46,7 +46,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-03-PLAN.md — Deploy + verify: case audit, push, enable GitHub Pages, live curl smoke tests, drop-in extensibility check
+- [x] 01-03-PLAN.md — Deploy + verify: case audit, push, enable GitHub Pages, live curl smoke tests, drop-in extensibility check
 
 **UI hint**: yes
 
@@ -118,7 +118,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Site Foundation + Hub Shell | 2/3 | In Progress|  |
+| 1. Site Foundation + Hub Shell | 3/3 | Complete   | 2026-06-04 |
 | 2. Timer Core | 0/? | Not started | - |
 | 3. Preset Manager | 0/? | Not started | - |
 | 4. Audio Controls | 0/? | Not started | - |

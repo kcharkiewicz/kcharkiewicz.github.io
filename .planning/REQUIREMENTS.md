@@ -9,7 +9,7 @@ Requirements for the initial release. Each maps to roadmap phases.
 
 ### Site & Deployment
 
-- [ ] **SITE-01**: Site is deployed to GitHub Pages and reachable at kcharkiewicz.github.io
+- [x] **SITE-01**: Site is deployed to GitHub Pages and reachable at kcharkiewicz.github.io
 - [x] **SITE-02**: Static delivery is robust against GitHub Pages pitfalls (`.nojekyll` present, all-lowercase paths, case-consistent links)
 
 ### Hub & Navigation
@@ -100,7 +100,7 @@ Which phases cover which requirements. Populated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SITE-01 | Phase 1 | Pending |
+| SITE-01 | Phase 1 | Complete |
 | SITE-02 | Phase 1 | Complete |
 | HUB-01 | Phase 1 | Complete |
 | HUB-02 | Phase 1 | Complete |
