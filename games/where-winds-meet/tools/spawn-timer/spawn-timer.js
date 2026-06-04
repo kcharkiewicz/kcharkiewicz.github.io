@@ -155,12 +155,12 @@ if (typeof document !== 'undefined') {
     cycleEnd: null,      // Date.now() epoch ms — absolute wall-clock deadline
     pausedAt: null,      // Date.now() epoch ms — set on Pause
     cycleIndex: 0,       // 0-based current cycle
-    totalCycles: 1,      // total cycles configured
+    totalCycles: 1,      // total cycles configured (ignored when unlimited)
     unlimited: false,    // true → infinite cycles
     durationMs: 0        // cycle duration in ms
   };
 
-  // ── DOM refs (wired in init()) ───────────────────────────────────────────────
+  // ── DOM refs (wired in DOMContentLoaded) ────────────────────────────────────
   let timerRoot, timerDisplay, cycleCounter, stateLabel, timerAnnouncer;
   let inputDuration, inputRepeat, inputUnlimited;
   let errorDuration, errorRepeat;
@@ -176,7 +176,7 @@ if (typeof document !== 'undefined') {
       if (data.schemaVersion !== SCHEMA_VERSION) return null;
       return data;
     } catch (e) {
-      return null; // QuotaExceededError, JSON parse error, etc.
+      return null; // QuotaExceededError, JSON parse error, schemaVersion mismatch, etc.
     }
   }
 
@@ -194,9 +194,32 @@ if (typeof document !== 'undefined') {
   function setTimerState(phase) {
     state.phase = phase;
     timerRoot.dataset.state = phase;
-    // Update the state label text
+    // Update state label text; running pip is CSS-driven (color on .timer__state-label)
     const labels = { idle: '', running: 'Running', paused: 'Paused', finished: 'Finished' };
     stateLabel.textContent = labels[phase] || '';
+  }
+
+  // ── Config input locking ─────────────────────────────────────────────────────
+
+  function lockConfigInputs() {
+    // disabled = interaction lock + a11y "unavailable" signal; CSS handles opacity
+    inputDuration.disabled  = true;
+    inputRepeat.disabled    = true;
+    inputUnlimited.disabled = true;
+  }
+
+  function unlockConfigInputs() {
+    inputDuration.disabled  = false;
+    inputRepeat.disabled    = false;
+    // Unlimited checkbox re-enable honours its own toggle state:
+    // if it's currently checked the number input stays disabled
+    inputUnlimited.disabled = false;
+    syncUnlimitedToggle();
+  }
+
+  function syncUnlimitedToggle() {
+    // Wire the Unlimited checkbox so the number input is disabled while checked
+    inputRepeat.disabled = inputUnlimited.checked;
   }
 
   // ── Display update ───────────────────────────────────────────────────────────
@@ -208,8 +231,8 @@ if (typeof document !== 'undefined') {
   // ── Cycle counter ────────────────────────────────────────────────────────────
 
   function updateCycleCounter() {
-    const total = state.unlimited ? '∞' : state.totalCycles;
-    cycleCounter.textContent = `Cycle ${state.cycleIndex + 1} / ${total}`;
+    // Uses the exported pure cycleLabel helper — textContent only
+    cycleCounter.textContent = cycleLabel(state.cycleIndex, state.totalCycles, state.unlimited);
   }
 
   // ── Flash + screen reader ────────────────────────────────────────────────────
@@ -285,7 +308,7 @@ if (typeof document !== 'undefined') {
   }
 
   function playBeep() {
-    if (!audioCtx) return; // guard: AudioContext not yet created
+    if (!audioCtx) return; // guard: AudioContext not yet created (no gesture yet)
     if (audioCtx.state !== 'running') {
       // Attempt resume; schedule beep after resume completes (resume() is async)
       audioCtx.resume().then(() => scheduleBeep()).catch(() => {});
@@ -294,16 +317,90 @@ if (typeof document !== 'undefined') {
     scheduleBeep();
   }
 
-  // ── Cycle end handler ────────────────────────────────────────────────────────
+  // ── Cycle end handler (multi-cycle) ─────────────────────────────────────────
 
   function handleCycleEnd() {
-    stopWorker();
     playBeep();
     flashDisplay();
-    announceToScreenReader('Cycle 1 complete');
-    timerDisplay.textContent = '00:00';
-    setTimerState('finished');
-    saveTimerState({ ...state, phase: 'finished' });
+    announceToScreenReader('Cycle ' + (state.cycleIndex + 1) + ' complete');
+
+    if (isLastCycle(state.cycleIndex, state.totalCycles, state.unlimited)) {
+      // Final cycle — transition to finished
+      stopWorker();
+      timerDisplay.textContent = '00:00';
+      setTimerState('finished');
+      unlockConfigInputs();
+      updateCycleCounter(); // show final cycle count
+      saveTimerState({ ...state, phase: 'finished' });
+    } else {
+      // More cycles remaining — advance to next
+      state.cycleIndex++;
+      state.cycleEnd = Date.now() + state.durationMs;
+      saveTimerState({ ...state, phase: 'running' });
+      updateCycleCounter();
+    }
+  }
+
+  // ── Pause ────────────────────────────────────────────────────────────────────
+
+  function pauseTimer() {
+    state.pausedAt = Date.now();
+    stopWorker();
+    setTimerState('paused');
+    // Render the frozen remaining value
+    updateDisplay(state.cycleEnd - state.pausedAt);
+    saveTimerState({ ...state, phase: 'paused' });
+  }
+
+  // ── Resume ───────────────────────────────────────────────────────────────────
+
+  function resumeTimer() {
+    // Resume click IS the user gesture — re-arm audio context first
+    ensureAudioContext();
+    // Shift the deadline forward by the pause duration (Pitfall 7)
+    state.cycleEnd = resumeDeadline(state.cycleEnd, state.pausedAt, Date.now());
+    state.pausedAt = null;
+    saveTimerState({ ...state, phase: 'running' });
+    startWorker();
+    setTimerState('running');
+  }
+
+  // ── Reset ────────────────────────────────────────────────────────────────────
+
+  function resetTimer() {
+    stopWorker();
+    // Clear saved state from localStorage (best-effort)
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* best-effort */ }
+    // Reset in-memory state to idle defaults
+    state.phase      = 'idle';
+    state.cycleEnd   = null;
+    state.pausedAt   = null;
+    state.cycleIndex = 0;
+    state.totalCycles = 1;
+    state.unlimited  = false;
+    state.durationMs = 0;
+    // Re-enable config so user can edit
+    unlockConfigInputs();
+    // Restore display to duration-field preview or "00:00"
+    const preview = parseDuration(inputDuration.value);
+    timerDisplay.textContent = preview !== null ? formatRemaining(preview) : '00:00';
+    // Reset cycle counter to preview
+    updateCycleCounterIdle();
+    setTimerState('idle');
+  }
+
+  // ── Idle cycle-counter preview ───────────────────────────────────────────────
+
+  function updateCycleCounterIdle() {
+    // Show a preview of "Cycle 1 / N" (or / ∞) using the current field values
+    const repeat = parseRepeat(inputRepeat.value, inputUnlimited.checked);
+    if (repeat === null) {
+      cycleCounter.textContent = 'Cycle 1 / 1';
+    } else if (typeof repeat === 'object' && repeat.unlimited) {
+      cycleCounter.textContent = cycleLabel(0, 1, true);
+    } else {
+      cycleCounter.textContent = cycleLabel(0, repeat, false);
+    }
   }
 
   // ── Input validation ─────────────────────────────────────────────────────────
@@ -311,6 +408,46 @@ if (typeof document !== 'undefined') {
   function clearErrors() {
     errorDuration.textContent = '';
     errorRepeat.textContent = '';
+  }
+
+  // ── Storage restore ──────────────────────────────────────────────────────────
+
+  function restoreFromStorage() {
+    const saved = loadTimerState();
+    if (!saved) return; // no record or parse error → start clean in idle
+
+    if (saved.phase === 'running' || saved.phase === 'paused') {
+      // Restore state from saved record — numbers re-derived, never rendered directly
+      state.durationMs  = saved.durationMs  || 0;
+      state.cycleIndex  = saved.cycleIndex  || 0;
+      state.totalCycles = saved.totalCycles || 1;
+      state.unlimited   = !!saved.unlimited;
+      state.cycleEnd    = saved.cycleEnd    || Date.now();
+
+      // Compute remaining at restore time
+      const remaining = state.cycleEnd - Date.now();
+
+      // Do NOT auto-start (Pitfall 1: no gesture exists → AudioContext cannot unlock)
+      // Set pausedAt to now so a subsequent Resume will preserve the shown remaining
+      state.pausedAt = Date.now();
+
+      // Render the restored values
+      updateDisplay(Math.max(0, remaining));
+      updateCycleCounter();
+      lockConfigInputs();
+      setTimerState('paused'); // Resume CTA is the re-arming gesture
+    } else if (saved.phase === 'finished') {
+      // Restore the finished view
+      state.durationMs  = saved.durationMs  || 0;
+      state.cycleIndex  = (saved.cycleIndex || 0);
+      state.totalCycles = saved.totalCycles || 1;
+      state.unlimited   = !!saved.unlimited;
+      timerDisplay.textContent = '00:00';
+      updateCycleCounter();
+      unlockConfigInputs();
+      setTimerState('finished');
+    }
+    // idle → no restore needed
   }
 
   // ── Entry point ───────────────────────────────────────────────────────────────
@@ -332,7 +469,25 @@ if (typeof document !== 'undefined') {
     btnPause       = document.getElementById('btn-pause');
     btnReset       = document.getElementById('btn-reset');
 
+    // Unlimited checkbox wires the repeat number input
+    inputUnlimited.addEventListener('change', () => {
+      syncUnlimitedToggle();
+      updateCycleCounterIdle();
+    });
+
+    // Idle preview: update cycle counter as user types in the repeat field
+    inputRepeat.addEventListener('input', () => {
+      if (state.phase === 'idle') updateCycleCounterIdle();
+    });
+
+    // Restore timer state from localStorage before wiring button handlers
+    restoreFromStorage();
+
+    // Show idle cycle counter preview if starting fresh
+    if (state.phase === 'idle') updateCycleCounterIdle();
+
     // AudioContext resume on tab visibility return (iOS Safari 'interrupted' state)
+    // Also triggers background catch-up (Task 3 extends this handler)
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible' && audioCtx) {
         audioCtx.resume().catch(() => {});
@@ -356,17 +511,32 @@ if (typeof document !== 'undefined') {
         return;
       }
 
+      // Validate repeat count
+      const repeatResult = parseRepeat(inputRepeat.value, inputUnlimited.checked);
+      if (repeatResult === null) {
+        errorRepeat.textContent = 'Repeat must be 1 or more, or choose Unlimited.';
+        return;
+      }
+
       // Gesture unlock — MUST be synchronous inside the click handler
       ensureAudioContext();
 
-      // Configure state
-      state.durationMs   = durationMs;
-      state.cycleIndex   = 0;
-      state.totalCycles  = 1;  // single-cycle for plan 01; plan 02 wires repeat count
-      state.unlimited    = false;
-      state.cycleEnd     = Date.now() + durationMs;
+      // Configure state from validated inputs
+      state.durationMs  = durationMs;
+      state.cycleIndex  = 0;
+      state.pausedAt    = null;
 
-      // Persist deadline shape (consumed for reload restore in plan 02)
+      if (typeof repeatResult === 'object' && repeatResult.unlimited) {
+        state.unlimited   = true;
+        state.totalCycles = 1; // ignored during unlimited run
+      } else {
+        state.unlimited   = false;
+        state.totalCycles = repeatResult; // already validated integer >= 1
+      }
+
+      state.cycleEnd = Date.now() + durationMs;
+
+      // Persist deadline shape (consumed by reload restore)
       saveTimerState({
         phase: 'running',
         cycleEnd: state.cycleEnd,
@@ -376,7 +546,8 @@ if (typeof document !== 'undefined') {
         durationMs: state.durationMs
       });
 
-      // Set visual state and render first frame
+      // Set visual state, render first frame, lock config
+      lockConfigInputs();
       setTimerState('running');
       updateCycleCounter();
       updateDisplay(durationMs);
@@ -384,19 +555,19 @@ if (typeof document !== 'undefined') {
       startWorker();
     });
 
-    // ── Resume button (stub seam for plan 02) ───────────────────────────────────
+    // ── Resume button ────────────────────────────────────────────────────────────
     btnResume.addEventListener('click', () => {
-      // Plan 02 wires pause/resume; leaving as a clean seam here
+      if (state.phase === 'paused') resumeTimer();
     });
 
-    // ── Pause button (stub seam for plan 02) ────────────────────────────────────
+    // ── Pause button ─────────────────────────────────────────────────────────────
     btnPause.addEventListener('click', () => {
-      // Plan 02 wires pause/resume; leaving as a clean seam here
+      if (state.phase === 'running') pauseTimer();
     });
 
-    // ── Reset button (stub seam for plan 02) ────────────────────────────────────
+    // ── Reset button ─────────────────────────────────────────────────────────────
     btnReset.addEventListener('click', () => {
-      // Plan 02 wires full reset; leaving as a clean seam here
+      resetTimer();
     });
   });
 }
