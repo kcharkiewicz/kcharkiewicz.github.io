@@ -43,6 +43,7 @@ body {
   --color-border:          #2a2e38;   /* subtle dividers, card edges */
   --color-text-primary:    #e8e4d8;   /* body copy, headings — parchment-neutral */
   --color-text-secondary:  #9a9690;   /* muted labels, tool-count line, breadcrumb separators */
+  --color-error:           #e05c5c;   /* validation/error text — distinct from muted helper text */
 
   /* Accent defaults — neutral hub; same jade/gold so hub card looks on-theme.
      Overridden per-game via the [data-game] blocks below. */

@@ -136,7 +136,7 @@
 .timer__error {
   display: block;
   font-size: var(--text-label);
-  color: var(--color-text-secondary);
+  color: var(--color-error);
   min-height: 1.4em;
   margin-top: var(--space-xs);
 }
