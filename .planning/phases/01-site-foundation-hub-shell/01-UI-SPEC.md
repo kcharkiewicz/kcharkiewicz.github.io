@@ -362,8 +362,10 @@ packages, no npm-sourced UI blocks. All components are hand-authored HTML/CSS.
 3. All asset paths must be root-absolute (`/shared/theme.css`, `/favicon.svg`,
    `/games/where-winds-meet/cover.svg`). Never use relative paths.
 
-4. All filenames must be all-lowercase. Enforce with `git config core.ignorecase false`
-   before first commit.
+4. All filenames must be all-lowercase. Enforce this by **naming convention only** —
+   never introduce a mixed-case filename. **Do NOT run `git config core.ignorecase false`
+   on Windows** — it breaks git on NTFS (see RESEARCH.md Pitfall 2 and CONTEXT.md CF-05).
+   Audit with `git ls-files | grep -E '[A-Z]'` (must return zero results).
 
 5. `.nojekyll` must be the first file committed to the repo root.
 

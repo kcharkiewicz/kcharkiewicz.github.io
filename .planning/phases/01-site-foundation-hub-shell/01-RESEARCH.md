@@ -593,17 +593,19 @@ CSS separators via `li + li::before { content: " / "; color: var(--color-text-se
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should the breadcrumb renderer be a shared ES module or inlined per page?**
    - What we know: Inlining 6 lines per page is DRY enough for 3 pages; a shared module requires `<script type="module">` and browser ES module support.
    - What's unclear: Personal preference for duplication tolerance.
    - Recommendation: Inline for Phase 1 (3 pages). Extract to `/shared/breadcrumb.js` as a module in Phase 2 when the fourth page (timer interactive) is added.
+   - **RESOLVED:** Inline per page for Phase 1 (locked by Plan 01-02 design; extraction deferred to Phase 2).
 
 2. **Does the repo `kcharkiewicz.github.io` already exist on GitHub?**
    - What we know: Research cannot confirm the repo's current state from this machine.
    - What's unclear: Whether the repo exists and whether Pages is already enabled.
    - Recommendation: Plan should include a "verify repo exists and Pages is enabled" task as Wave 0.
+   - **RESOLVED:** Plan 01-03 Task 1 verifies/creates the repo+remote at runtime and Task 2 (human-action checkpoint) enables Pages — unknown state is handled by the tasks.
 
 ---
 
