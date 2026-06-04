@@ -459,6 +459,11 @@ if (typeof document !== 'undefined') {
       state.cycleIndex  = (saved.cycleIndex || 0);
       state.totalCycles = saved.totalCycles || 1;
       state.unlimited   = !!saved.unlimited;
+      state.cycleEnd    = null; // explicit — no active deadline in finished state
+      // Restore the Duration input so the user sees the prior config
+      if (state.durationMs > 0) {
+        inputDuration.value = formatRemaining(state.durationMs);
+      }
       timerDisplay.textContent = '00:00';
       updateCycleCounter();
       unlockConfigInputs();
