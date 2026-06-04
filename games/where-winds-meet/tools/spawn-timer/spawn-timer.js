@@ -168,12 +168,28 @@ if (typeof document !== 'undefined') {
 
   // ── localStorage helpers ─────────────────────────────────────────────────────
 
+  function isValidSavedState(data) {
+    // Type/range validation of restored fields (T-02-04, T-02-07).
+    // Guards against non-numeric cycleEnd/durationMs producing NaN at runtime.
+    return (
+      typeof data.cycleEnd    === 'number' && isFinite(data.cycleEnd)    && data.cycleEnd > 0 &&
+      typeof data.durationMs  === 'number' && isFinite(data.durationMs)  && data.durationMs > 0 &&
+      typeof data.cycleIndex  === 'number' && Number.isInteger(data.cycleIndex)  && data.cycleIndex >= 0 &&
+      typeof data.totalCycles === 'number' && Number.isInteger(data.totalCycles) && data.totalCycles >= 1 &&
+      typeof data.unlimited   === 'boolean'
+    );
+  }
+
   function loadTimerState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return null;
       const data = JSON.parse(raw);
       if (data.schemaVersion !== SCHEMA_VERSION) return null;
+      if (!['running', 'paused', 'finished', 'idle'].includes(data.phase)) return null;
+      // Any non-idle record must carry well-formed numeric fields or we fall
+      // through to a clean idle start (malformed/attacker-controlled record).
+      if (data.phase !== 'idle' && !isValidSavedState(data)) return null;
       return data;
     } catch (e) {
       return null; // QuotaExceededError, JSON parse error, schemaVersion mismatch, etc.
