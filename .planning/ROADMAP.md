@@ -68,7 +68,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 02-01-PLAN.md — Core countdown slice: fill in timer markup + component CSS + main ES module + Web Worker; enter duration → Start → glanceable drift-corrected countdown → beep + jade flash at zero (single cycle); node:test for duration parsing/formatting
+- [x] 02-01-PLAN.md — Core countdown slice: fill in timer markup + component CSS + main ES module + Web Worker; enter duration → Start → glanceable drift-corrected countdown → beep + jade flash at zero (single cycle); node:test for duration parsing/formatting
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -128,7 +128,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Site Foundation + Hub Shell | 3/3 | Complete    | 2026-06-04 |
-| 2. Timer Core | 0/2 | Planned | - |
+| 2. Timer Core | 1/2 | In Progress|  |
 | 3. Preset Manager | 0/? | Not started | - |
 | 4. Audio Controls | 0/? | Not started | - |
 | 5. Second-Screen Polish | 0/? | Not started | - |
