@@ -688,21 +688,24 @@ announceToScreenReader(`Cycle ${state.cycleIndex + 1} complete`);
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should the timer auto-resume after a page reload if localStorage has a running state?**
    - What we know: AudioContext cannot be created without a gesture, so a beep cannot fire during auto-resume before the user acts.
    - What's unclear: Does the product want a "Resume" prompt, or should the timer silently track the elapsed time and just show the correct remaining value?
    - Recommendation: Show correct remaining countdown (from stored deadline) as static display, show "Resume" as the primary CTA. This is both the cleanest UX and the correct technical path.
+   - **RESOLVED:** No auto-start on reload — restore the remaining display from the stored deadline and surface "Resume" as the primary CTA (re-arms the audio gesture). Implemented in plan 02-02 Task 3 (`loadTimerState` + paused state on restore).
 
 2. **What is the `intervalMs` for the Worker?**
    - Finer granularity = smoother countdown, more messages.
    - 100ms (10 messages/second) is a good balance: smooth enough for a seconds-precision timer, low overhead.
    - Recommendation: 100ms. Display update only changes the DOM when the seconds value changes.
+   - **RESOLVED:** 100ms, declared as `TICK_INTERVAL_MS = 100`. Implemented in plan 02-01 (interfaces + Worker protocol).
 
 3. **How many missed cycles should trigger a beep on `visibilitychange` return?**
    - What we know: Firing N beeps for N missed cycles is jarring.
    - Recommendation: Fire 1 beep maximum on return regardless of missed cycles; update the cycle counter to the correct current cycle.
+   - **RESOLVED:** Cap to exactly 1 beep on return regardless of how many cycles elapsed while backgrounded; advance the cycle counter to the correct current cycle. Implemented in plan 02-02 Task 3 (`visibilitychange` catch-up).
 
 ---
 
