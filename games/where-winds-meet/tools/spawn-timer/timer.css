@@ -168,7 +168,10 @@
 }
 
 .timer__input:hover { border-color: var(--color-text-secondary); }
-.timer__input:focus { border-color: var(--color-accent); outline: none; }
+.timer__input:focus { border-color: var(--color-accent); }
+/* Suppress outline only for pointer focus; keyboard focus keeps the
+   theme.css :focus-visible ring for accessibility. */
+.timer__input:focus:not(:focus-visible) { outline: none; }
 
 .timer__input--number {
   width: auto;
