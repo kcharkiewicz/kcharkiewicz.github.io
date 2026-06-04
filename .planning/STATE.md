@@ -31,21 +31,21 @@ progress:
 
 ## Current Position
 
-Phase: 02 (timer-core) — EXECUTING
-Plan: 1 of 2
-**Active phase:** 2 — Timer Core (not yet planned)
-**Active plan:** None
-**Phase status:** Phase 1 complete; Phase 2 ready to plan
-**Milestone status:** In progress (1 / 5 phases complete)
+Phase: 02 (timer-core) — BUILT + reviewed + fixed
+Plan: 2 of 2 complete
+**Active phase:** 2 — Timer Core
+**Active plan:** None (both plans have SUMMARYs)
+**Phase status:** Implementation + tests done; all 2 critical + 4 warning review findings fixed (6 commits); 55/55 node:tests pass. Ready to verify.
+**Milestone status:** In progress (1 / 5 phases complete; Phase 2 awaiting verification)
 
 **Progress:**
 
 ```
 Phase 1 [██████████] 100%  Complete (2026-06-04, live at kcharkiewicz.github.io)
-Phase 2 [          ] 0%    Ready to plan
-Phase 3 [          ] 0%    Not started
-Phase 4 [          ] 0%    Not started
-Phase 5 [          ] 0%    Not started
+Phase 2 [█████████░]  ~95% Built + reviewed + fixed; awaiting verify
+Phase 3 [          ]   0%  Not started (Preset Manager — no CONTEXT.md)
+Phase 4 [          ]   0%  Not started
+Phase 5 [          ]   0%  Not started
 ```
 
 ---
@@ -114,8 +114,8 @@ Phase 5 [          ] 0%    Not started
 
 ## Session Continuity
 
-**Last session:** 2026-06-04T12:47:57.861Z
-**Next action:** Discuss/plan Phase 2 — Timer Core (`/gsd:discuss-phase 2`)
+**Last session:** 2026-06-04 — Phase 2 built, code-reviewed, and all 6 in-scope findings fixed (CR-01, CR-02, WR-01..04) across 6 atomic commits; 55/55 node:tests pass. IN-01/IN-02 deferred (info-level). REVIEW.md status: fixed.
+**Next action:** Verify Phase 2 (`/gsd:verify-work` — manual checks: reload-in-finished-state, multi-cycle boundary, NaN-storage rejection). Then Phase 3 (Preset Manager) — start with `/gsd:discuss-phase 3` (no CONTEXT.md yet).
 
 ---
 

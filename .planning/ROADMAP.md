@@ -11,7 +11,7 @@
 ## Phases
 
 - [x] **Phase 1: Site Foundation + Hub Shell** — Deployable site at kcharkiewicz.github.io with hub, game page, URL hierarchy, dark theme tokens, and favicon (completed 2026-06-04)
-- [ ] **Phase 2: Timer Core** — Fully working GvG spawn timer with drift-corrected Web Worker timing, audible alert, and glanceable display
+- [x] **Phase 2: Timer Core** — Fully working GvG spawn timer with drift-corrected Web Worker timing, audible alert, and glanceable display (completed 2026-06-04)
 - [ ] **Phase 3: Preset Manager** — Named preset CRUD persisted in defensive namespaced localStorage
 - [ ] **Phase 4: Audio Controls** — Volume/mute control and bundled sound selection, both persisted
 - [ ] **Phase 5: Second-Screen Polish** — Responsive layout, touch targets, and hardened second-screen reliability
@@ -72,7 +72,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 02-02-PLAN.md — Controls + multi-cycle + persistence slice: repeat/unlimited + live cycle counter, pause/resume (deadline-preserving), reset, full running/paused/finished state model, hard-refresh restore + corrupt-storage safety, background-tab catch-up; node:test for cycle/deadline math
+- [x] 02-02-PLAN.md — Controls + multi-cycle + persistence slice: repeat/unlimited + live cycle counter, pause/resume (deadline-preserving), reset, full running/paused/finished state model, hard-refresh restore + corrupt-storage safety, background-tab catch-up; node:test for cycle/deadline math
 
 **UI hint**: yes
 
@@ -128,7 +128,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Site Foundation + Hub Shell | 3/3 | Complete    | 2026-06-04 |
-| 2. Timer Core | 1/2 | In Progress|  |
+| 2. Timer Core | 2/2 | Complete   | 2026-06-04 |
 | 3. Preset Manager | 0/? | Not started | - |
 | 4. Audio Controls | 0/? | Not started | - |
 | 5. Second-Screen Polish | 0/? | Not started | - |
