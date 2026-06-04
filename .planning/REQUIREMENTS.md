@@ -15,9 +15,9 @@ Requirements for the initial release. Each maps to roadmap phases.
 ### Hub & Navigation
 
 - [x] **HUB-01**: User sees a landing page listing supported games as cards, each linking to that game's page
-- [ ] **HUB-02**: User sees a Where Winds Meet game page listing its tools, each linking to the tool's page
-- [ ] **HUB-03**: User has consistent header and back/up navigation on every page
-- [ ] **HUB-04**: URLs map to the hierarchy (`/`, `/where-winds-meet/`, `/where-winds-meet/spawn-timer/`) so any page is bookmarkable
+- [x] **HUB-02**: User sees a Where Winds Meet game page listing its tools, each linking to the tool's page
+- [x] **HUB-03**: User has consistent header and back/up navigation on every page
+- [x] **HUB-04**: URLs map to the hierarchy (`/`, `/where-winds-meet/`, `/where-winds-meet/spawn-timer/`) so any page is bookmarkable
 - [x] **HUB-05**: A new game page or tool can be added as a drop-in registry entry without restructuring existing pages
 
 ### Timer
@@ -103,9 +103,9 @@ Which phases cover which requirements. Populated during roadmap creation.
 | SITE-01 | Phase 1 | Pending |
 | SITE-02 | Phase 1 | Complete |
 | HUB-01 | Phase 1 | Complete |
-| HUB-02 | Phase 1 | Pending |
-| HUB-03 | Phase 1 | Pending |
-| HUB-04 | Phase 1 | Pending |
+| HUB-02 | Phase 1 | Complete |
+| HUB-03 | Phase 1 | Complete |
+| HUB-04 | Phase 1 | Complete |
 | HUB-05 | Phase 1 | Complete |
 | THEME-01 | Phase 1 | Complete |
 | THEME-02 | Phase 1 | Complete |

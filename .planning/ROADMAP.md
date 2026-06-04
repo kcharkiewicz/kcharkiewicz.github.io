@@ -42,7 +42,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 01-02-PLAN.md — Full hierarchy: WWM game page with breadcrumb + tools registry, drop-in cover SVG, themed spawn-timer stub page (no 404)
+- [x] 01-02-PLAN.md — Full hierarchy: WWM game page with breadcrumb + tools registry, drop-in cover SVG, themed spawn-timer stub page (no 404)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -118,7 +118,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Site Foundation + Hub Shell | 1/3 | In Progress|  |
+| 1. Site Foundation + Hub Shell | 2/3 | In Progress|  |
 | 2. Timer Core | 0/? | Not started | - |
 | 3. Preset Manager | 0/? | Not started | - |
 | 4. Audio Controls | 0/? | Not started | - |
