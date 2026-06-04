@@ -6,6 +6,7 @@
   <title>Spawn Timer — Where Winds Meet — Game Tools Hub</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/shared/theme.css">
+  <link rel="stylesheet" href="/games/where-winds-meet/tools/spawn-timer/timer.css">
 </head>
 <body data-game="where-winds-meet">
   <header class="site-header">
@@ -20,11 +21,55 @@
     </ol>
   </nav>
 
-  <main style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 200px); padding: var(--space-xl);">
-    <div style="text-align: center; max-width: 480px;">
-      <h1 style="font-size: var(--text-heading); font-weight: 600; line-height: 1.2; margin: 0 0 var(--space-sm);">Spawn Timer</h1>
-      <p style="font-size: var(--text-label); color: var(--color-text-secondary); margin: 0 0 var(--space-lg);">GvG jungle spawn timer</p>
-      <p style="font-size: var(--text-body); color: var(--color-text-secondary); margin: 0;">Coming in Phase 2. This page is your bookmark — the timer will load here when it's ready.</p>
+  <main>
+    <div class="timer" id="timer" data-state="idle">
+
+      <div class="timer__header">
+        <h1 class="timer__title">Spawn Timer</h1>
+        <p class="timer__subtitle">GvG jungle spawn timer</p>
+      </div>
+
+      <div class="timer__status">
+        <span class="timer__cycle-counter" id="cycle-counter">Cycle 1 / 1</span>
+        <span class="timer__state-label" id="state-label"></span>
+      </div>
+
+      <div class="timer__display" id="timer-display" role="timer"
+           aria-label="Countdown timer" aria-atomic="true">
+        03:00
+      </div>
+
+      <!-- Visually hidden assertive live region — fires only at cycle end -->
+      <div class="sr-only" id="timer-announcer"
+           aria-live="assertive" aria-atomic="true"></div>
+
+      <div class="timer__config" id="timer-config">
+        <div class="timer__field">
+          <label class="timer__label" for="input-duration">Duration</label>
+          <input class="timer__input" type="text" id="input-duration"
+                 placeholder="e.g. 3:00 or 180" autocomplete="off">
+          <span class="timer__helper">MM:SS or seconds</span>
+          <span class="timer__error" id="error-duration" role="alert"></span>
+        </div>
+
+        <div class="timer__field">
+          <label class="timer__label" for="input-repeat">Repeat</label>
+          <input class="timer__input timer__input--number" type="number"
+                 id="input-repeat" min="1" value="1">
+          <label class="timer__unlimited-label">
+            <input type="checkbox" id="input-unlimited"> Unlimited
+          </label>
+          <span class="timer__error" id="error-repeat" role="alert"></span>
+        </div>
+      </div>
+
+      <div class="timer__controls" id="timer-controls">
+        <button class="btn btn--primary" id="btn-start" type="button">Start</button>
+        <button class="btn btn--primary" id="btn-resume" type="button">Resume</button>
+        <button class="btn btn--secondary" id="btn-pause" type="button">Pause</button>
+        <button class="btn btn--outline" id="btn-reset" type="button">Reset</button>
+      </div>
+
     </div>
   </main>
 
@@ -58,5 +103,6 @@
       renderBreadcrumb(breadcrumbItems, 'breadcrumb');
     });
   </script>
+  <script type="module" src="/games/where-winds-meet/tools/spawn-timer/spawn-timer.js"></script>
 </body>
 </html>

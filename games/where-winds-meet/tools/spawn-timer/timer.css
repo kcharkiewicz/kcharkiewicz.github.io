@@ -1,0 +1,262 @@
+/* ==========================================================================
+   timer.css — Spawn Timer component styles
+   Layered on top of /shared/theme.css tokens. Never redefines base tokens.
+   ========================================================================== */
+
+/* Layout: timer root */
+.timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-md);
+  min-height: calc(100vh - 200px);
+}
+
+@media (min-width: 768px) {
+  .timer {
+    max-width: 480px;
+    margin-inline: auto;
+    padding: var(--space-xl);
+    gap: var(--space-2xl);
+  }
+}
+
+/* Tool header */
+.timer__header {
+  text-align: center;
+  width: 100%;
+}
+
+.timer__title {
+  font-size: var(--text-heading);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-xs);
+}
+
+.timer__subtitle {
+  font-size: var(--text-label);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Status row: cycle counter + state label */
+.timer__status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.timer__cycle-counter {
+  font-size: var(--text-label);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.timer__state-label {
+  font-size: var(--text-label);
+  color: var(--color-text-secondary);
+}
+
+.timer[data-state="running"] .timer__state-label {
+  color: var(--color-accent);
+}
+
+/* Countdown display — the dominant element */
+.timer__display {
+  font-size: clamp(56px, 22vw, 112px);
+  font-weight: 600;
+  line-height: 1.0;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--color-text-primary);
+}
+
+/* Cycle-end flash animation */
+@keyframes timer-flash {
+  0%   { color: var(--color-text-primary); }
+  20%  { color: var(--color-accent); }
+  100% { color: var(--color-text-primary); }
+}
+
+.timer__display.is-flashing {
+  animation: timer-flash 300ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timer__display.is-flashing { animation: none; }
+}
+
+/* Config panel */
+.timer__config {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+/* Config panel dimming while running/paused */
+.timer[data-state="running"] .timer__config,
+.timer[data-state="paused"]  .timer__config {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.timer__config :is(input, button, [type="checkbox"]):disabled {
+  cursor: not-allowed;
+}
+
+/* Config field */
+.timer__field {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Labels and helper text */
+.timer__label {
+  display: block;
+  font-size: var(--text-label);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-xs);
+}
+
+.timer__helper {
+  display: block;
+  font-size: var(--text-label);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+}
+
+.timer__error {
+  display: block;
+  font-size: var(--text-label);
+  color: var(--color-text-secondary);
+  min-height: 1.4em;
+  margin-top: var(--space-xs);
+}
+
+/* Unlimited toggle label */
+.timer__unlimited-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-label);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+  cursor: pointer;
+}
+
+/* Input fields */
+.timer__input {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-text-primary);
+  font-size: var(--text-body);
+  padding: 0 var(--space-md);
+  transition: border-color 150ms ease;
+  box-sizing: border-box;
+}
+
+.timer__input:hover { border-color: var(--color-text-secondary); }
+.timer__input:focus { border-color: var(--color-accent); outline: none; }
+
+.timer__input--number {
+  width: auto;
+}
+
+/* Control bar */
+.timer__controls {
+  display: flex;
+  gap: var(--space-sm);
+  width: 100%;
+  margin-top: auto;
+  padding-bottom: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .timer__controls {
+    margin-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+/* Buttons — base */
+.btn {
+  min-height: 44px;
+  padding: 0 var(--space-md);
+  border-radius: 6px;
+  font-size: var(--text-body);
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease, opacity 150ms ease;
+}
+
+.btn:active { opacity: 0.9; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Primary button (Start, Resume) — jade fill */
+.btn--primary {
+  background: var(--color-accent);
+  color: #0f1115;
+  border-color: var(--color-accent);
+  flex: 1;
+}
+
+.btn--primary:hover:not(:disabled) { filter: brightness(1.08); }
+
+/* Secondary button (Pause) — surface-raised */
+.btn--secondary {
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+  flex: 1;
+}
+
+.btn--secondary:hover:not(:disabled) { background: var(--color-surface-raised); filter: brightness(1.1); }
+
+/* Outline button (Reset) */
+.btn--outline {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+}
+
+.btn--outline:hover:not(:disabled) { background: var(--color-surface-raised); }
+
+/* State-driven button visibility */
+.timer[data-state="idle"]     #btn-pause,
+.timer[data-state="idle"]     #btn-resume,
+.timer[data-state="idle"]     #btn-reset  { display: none; }
+
+.timer[data-state="running"]  #btn-start,
+.timer[data-state="running"]  #btn-resume { display: none; }
+
+.timer[data-state="paused"]   #btn-start,
+.timer[data-state="paused"]   #btn-pause  { display: none; }
+
+.timer[data-state="finished"] #btn-pause,
+.timer[data-state="finished"] #btn-resume { display: none; }
+
+/* Visually hidden (sr-only) — screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
