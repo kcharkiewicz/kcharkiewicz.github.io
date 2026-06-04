@@ -75,34 +75,6 @@
 
   <footer class="site-footer">Game Tools Hub — personal project</footer>
 
-  <script>
-    // Breadcrumb renderer — reuses the same pattern as the game page.
-    // Ancestors get <a href> links; the final item (href: null) gets
-    // <span aria-current="page"> (not a link). Separators are CSS-generated
-    // via li + li::before in theme.css — NOT in the markup
-    // (RESEARCH Pitfall 4: CSS-generated separators are screen-reader safe).
-    // SECURITY: All values are static developer-defined literals.
-    const breadcrumbItems = [
-      { label: "Game Tools Hub", href: "/" },
-      { label: "Where Winds Meet", href: "/games/where-winds-meet/" },
-      { label: "Spawn Timer", href: null }
-    ];
-
-    function renderBreadcrumb(items, containerId) {
-      const listItems = items.map(item => {
-        if (item.href !== null) {
-          return `<li><a href="${item.href}">${item.label}</a></li>`;
-        } else {
-          return `<li><span aria-current="page">${item.label}</span></li>`;
-        }
-      }).join('');
-      document.getElementById(containerId).innerHTML = `<ol>${listItems}</ol>`;
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      renderBreadcrumb(breadcrumbItems, 'breadcrumb');
-    });
-  </script>
   <script type="module" src="/games/where-winds-meet/tools/spawn-timer/spawn-timer.js"></script>
 </body>
 </html>
