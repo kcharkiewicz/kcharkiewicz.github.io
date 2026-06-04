@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Where Winds Meet — Game Tools Hub</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/shared/theme.css">
+</head>
+<body data-game="where-winds-meet">
+  <header class="site-header">
+    <span class="site-title">Game Tools Hub</span>
+  </header>
+
+  <nav aria-label="Breadcrumb" id="breadcrumb">
+    <ol>
+      <li><a href="/">Game Tools Hub</a></li>
+      <li><span aria-current="page">Where Winds Meet</span></li>
+    </ol>
+  </nav>
+
+  <main>
+    <h1>Where Winds Meet</h1>
+    <p style="font-size: var(--text-label); color: var(--color-text-secondary); margin: 0 var(--space-xl) var(--space-2xl);">Tools for Where Winds Meet</p>
+    <div id="card-grid" class="card-grid"></div>
+  </main>
+
+  <footer class="site-footer">Game Tools Hub — personal project</footer>
+
+  <script>
+    // Breadcrumb renderer — breadcrumbItems array drives the trail.
+    // Ancestors get <a href> links; the final item (href: null) gets
+    // <span aria-current="page"> (not a link). Separators are CSS-generated
+    // via li + li::before in theme.css — NOT placed in the markup here
+    // (RESEARCH Pitfall 4: CSS-generated separators are screen-reader safe).
+    // SECURITY: All values are static developer-defined literals.
+    const breadcrumbItems = [
+      { label: "Game Tools Hub", href: "/" },
+      { label: "Where Winds Meet", href: null }
+    ];
+
+    function renderBreadcrumb(items, containerId) {
+      const listItems = items.map(item => {
+        if (item.href !== null) {
+          return `<li><a href="${item.href}">${item.label}</a></li>`;
+        } else {
+          return `<li><span aria-current="page">${item.label}</span></li>`;
+        }
+      }).join('');
+      document.getElementById(containerId).innerHTML = `<ol>${listItems}</ol>`;
+    }
+
+    // Tools registry — add a new tool by inserting one object here.
+    // No other file edits required (CF-04 / HUB-05).
+    // Tool cards use class="card card--no-cover" — no .card__cover element
+    // so there is no empty 160px panel (.card--no-cover collapses it in theme.css).
+    // SECURITY: All values are static developer-defined literals.
+    const tools = [
+      {
+        name: "Spawn Timer",
+        description: "GvG jungle spawn timer",
+        href: "/games/where-winds-meet/tools/spawn-timer/"
+      }
+    ];
+
+    function renderToolCards(items, containerId) {
+      const html = items.map(item => `
+        <a class="card card--no-cover" href="${item.href}">
+          <div class="card__body">
+            <h2 class="card__name">${item.name}</h2>
+            <p class="card__count">${item.description}</p>
+          </div>
+        </a>
+      `).join('');
+      document.getElementById(containerId).innerHTML = html;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      renderBreadcrumb(breadcrumbItems, 'breadcrumb');
+      renderToolCards(tools, 'card-grid');
+    });
+  </script>
+</body>
+</html>
