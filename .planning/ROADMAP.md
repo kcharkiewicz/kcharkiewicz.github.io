@@ -64,7 +64,16 @@ Plans:
   4. The cycle counter shows the correct current/total cycle (e.g. "Cycle 2 / 5") and the timer keeps accurate time when the browser tab is backgrounded for 2+ minutes
   5. The time display is readable at arm's length and meets WCAG AA contrast requirements
 
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+**Wave 1**
+
+- [ ] 02-01-PLAN.md — Core countdown slice: fill in timer markup + component CSS + main ES module + Web Worker; enter duration → Start → glanceable drift-corrected countdown → beep + jade flash at zero (single cycle); node:test for duration parsing/formatting
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 02-02-PLAN.md — Controls + multi-cycle + persistence slice: repeat/unlimited + live cycle counter, pause/resume (deadline-preserving), reset, full running/paused/finished state model, hard-refresh restore + corrupt-storage safety, background-tab catch-up; node:test for cycle/deadline math
+
 **UI hint**: yes
 
 ### Phase 3: Preset Manager
@@ -119,7 +128,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Site Foundation + Hub Shell | 3/3 | Complete    | 2026-06-04 |
-| 2. Timer Core | 0/? | Not started | - |
+| 2. Timer Core | 0/2 | Planned | - |
 | 3. Preset Manager | 0/? | Not started | - |
 | 4. Audio Controls | 0/? | Not started | - |
 | 5. Second-Screen Polish | 0/? | Not started | - |
@@ -127,4 +136,4 @@ Plans:
 ---
 
 *Roadmap created: 2026-06-04*
-*Last updated: 2026-06-04 after Phase 1 planning (3 plans created)*
+*Last updated: 2026-06-04 after Phase 2 planning (2 plans created)*
