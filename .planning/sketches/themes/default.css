@@ -1,0 +1,47 @@
+/* ==========================================================================
+   Shared sketch theme — structural tokens only.
+   Palette + typography differ per variant (Wuxia vs Neon) and are defined
+   inline in each sketch's index.html, scoped under #variant-a / #variant-b.
+   This file holds the vocabulary both directions agree on: spacing, radius,
+   the existing production ink palette (the starting point for Variant A).
+   ========================================================================== */
+
+:root {
+  /* Existing production ink palette (Variant A baseline) */
+  --color-bg:              #0f1115;
+  --color-surface:         #1a1d23;
+  --color-surface-raised:  #22262f;
+  --color-border:          #2a2e38;
+  --color-text-primary:    #e8e4d8;
+  --color-text-secondary:  #9a9690;
+  --color-accent:          #3fb98f;   /* jade */
+  --color-accent-secondary:#d4af37;   /* gold */
+
+  /* Spacing scale — multiples of 4px (matches production theme.css) */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* Shapes */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+}
+
+* , *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

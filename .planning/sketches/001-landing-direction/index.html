@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sketch 001 — Landing Direction · Game Tools Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../themes/default.css">
+<style>
+  /* ====================================================================
+     SKETCH CHROME — variant tabs + toolbar. Hardcoded dark, theme-neutral.
+     ==================================================================== */
+  body { padding-top: 50px; }
+
+  #variant-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+    background: #0a0c10; border-bottom: 1px solid #23262e;
+    padding: 8px 14px; display: flex; gap: 8px; align-items: center;
+    font-family: system-ui, sans-serif;
+  }
+  #variant-nav .label { color: #6b7280; font-size: 12px; margin-right: 6px; letter-spacing: .04em; }
+  .variant-tab {
+    background: #16181d; color: #cbd5e1; border: 1px solid #2a2e38;
+    padding: 6px 14px; border-radius: 7px; font-size: 13px; cursor: pointer;
+    transition: all .15s ease; font-family: inherit;
+  }
+  .variant-tab:hover { border-color: #475569; color: #fff; }
+  .variant-tab.active { background: #fff; color: #0a0c10; border-color: #fff; font-weight: 600; }
+
+  #sketch-tools {
+    position: fixed; bottom: 12px; right: 12px; z-index: 9999;
+    font-family: system-ui, sans-serif; font-size: 12px;
+    background: rgba(0,0,0,.78); color: #fff; padding: 8px 10px;
+    border-radius: 9px; opacity: .35; transition: opacity .2s;
+    display: flex; gap: 6px; align-items: center;
+  }
+  #sketch-tools:hover { opacity: 1; }
+  #sketch-tools button {
+    background: #1f2430; color: #cbd5e1; border: 1px solid #313846;
+    border-radius: 6px; padding: 4px 8px; cursor: pointer; font-size: 12px;
+  }
+  #sketch-tools button.active { background: #fff; color: #000; }
+  #sketch-tools .vp-label { color: #94a3b8; margin-right: 2px; }
+
+  /* Viewport stage */
+  #stage { margin: 0 auto; transition: max-width .2s ease; }
+  .variant { display: none; }
+  .variant.active { display: block; }
+
+  /* ====================================================================
+     VARIANT A — ELEVATED WUXIA
+     jade/gold ink-wash, Cinzel display, Inter body, calm & premium
+     ==================================================================== */
+  #variant-a {
+    --jade: #3fb98f;
+    --gold: #d4af37;
+    --ink: #0f1115;
+    --surface: #1a1d23;
+    --raised: #22262f;
+    --parchment: #e8e4d8;
+    --muted: #9a9690;
+    background:
+      radial-gradient(1100px 520px at 78% -8%, rgba(63,185,143,.10), transparent 60%),
+      radial-gradient(900px 480px at 12% 8%, rgba(212,175,55,.07), transparent 60%),
+      radial-gradient(1200px 700px at 50% 120%, rgba(0,0,0,.55), transparent 70%),
+      var(--ink);
+    min-height: 100vh; color: var(--parchment);
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  #variant-a .wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+  #variant-a .topbar { display: flex; align-items: center; justify-content: space-between; padding: 26px 0 8px; }
+  #variant-a .wordmark { font-family: 'Cinzel', serif; font-weight: 600; font-size: 17px; letter-spacing: .14em; color: var(--parchment); }
+  #variant-a .wordmark .dot { color: var(--jade); }
+  #variant-a .topnav { display: flex; gap: 22px; font-size: 13px; color: var(--muted); }
+  #variant-a .topnav a { color: var(--muted); text-decoration: none; transition: color .15s ease; }
+  #variant-a .topnav a:hover { color: var(--gold); }
+
+  #variant-a .hero { text-align: center; padding: 64px 0 40px; }
+  #variant-a .kicker {
+    font-size: 12px; letter-spacing: .42em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 22px;
+  }
+  #variant-a h1 {
+    font-family: 'Cinzel', serif; font-weight: 700;
+    font-size: clamp(40px, 7vw, 76px); line-height: 1.02; margin: 0;
+    color: var(--parchment);
+    text-shadow: 0 0 36px rgba(63,185,143,.30);
+  }
+  #variant-a h1 em { font-style: normal; color: var(--jade); }
+  #variant-a .subtitle {
+    max-width: 560px; margin: 22px auto 0; color: var(--muted);
+    font-size: 17px; line-height: 1.65;
+  }
+  /* gold filigree divider */
+  #variant-a .filigree { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 38px auto 4px; max-width: 320px; }
+  #variant-a .filigree .line { height: 1px; flex: 1; background: linear-gradient(90deg, transparent, rgba(212,175,55,.6)); }
+  #variant-a .filigree .line.r { background: linear-gradient(90deg, rgba(212,175,55,.6), transparent); }
+  #variant-a .filigree .diamond { width: 8px; height: 8px; transform: rotate(45deg); background: var(--gold); box-shadow: 0 0 10px rgba(212,175,55,.7); }
+
+  #variant-a .section-label {
+    text-align: center; font-size: 12px; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--muted); margin: 54px 0 22px;
+  }
+
+  #variant-a .grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px; padding-bottom: 80px; justify-content: center;
+  }
+  #variant-a .card {
+    position: relative; background: var(--surface);
+    border: 1px solid rgba(212,175,55,.22); border-radius: 14px;
+    overflow: hidden; text-decoration: none; color: inherit;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  #variant-a .card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--jade), transparent);
+    opacity: .55; transition: opacity .2s ease;
+  }
+  #variant-a .card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(63,185,143,.55);
+    box-shadow: 0 18px 44px -16px rgba(63,185,143,.45), 0 0 0 1px rgba(63,185,143,.15);
+  }
+  #variant-a .card:hover::before { opacity: 1; }
+  #variant-a .cover {
+    height: 168px; display: flex; align-items: center; justify-content: center;
+    background:
+      radial-gradient(420px 220px at 50% 120%, rgba(63,185,143,.22), transparent 70%),
+      radial-gradient(circle at 30% 20%, rgba(212,175,55,.10), transparent 55%),
+      var(--raised);
+    border-bottom: 1px solid rgba(212,175,55,.14);
+  }
+  #variant-a .seal {
+    width: 92px; height: 92px; border-radius: 50%;
+    border: 1px solid rgba(212,175,55,.5);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 26px rgba(63,185,143,.25), inset 0 0 22px rgba(0,0,0,.4);
+    animation: breathe 5s ease-in-out infinite;
+  }
+  @keyframes breathe { 0%,100% { box-shadow: 0 0 22px rgba(63,185,143,.20), inset 0 0 22px rgba(0,0,0,.4);} 50% { box-shadow: 0 0 34px rgba(63,185,143,.40), inset 0 0 22px rgba(0,0,0,.4);} }
+  #variant-a .seal svg { width: 46px; height: 46px; }
+  #variant-a .card-body { padding: 18px 20px 22px; }
+  #variant-a .card-name { font-family: 'Cinzel', serif; font-weight: 600; font-size: 21px; margin: 0 0 8px; color: var(--parchment); }
+  #variant-a .card-meta { font-size: 14px; color: var(--muted); margin: 0 0 14px; }
+  #variant-a .tag {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px;
+    color: var(--jade); border: 1px solid rgba(63,185,143,.35);
+    padding: 4px 11px; border-radius: 9999px; letter-spacing: .02em;
+  }
+  #variant-a .card.ghost {
+    background: transparent; border: 1px dashed rgba(154,150,144,.28);
+    display: flex; align-items: center; justify-content: center; min-height: 290px;
+    color: var(--muted); font-size: 14px; letter-spacing: .04em;
+  }
+  #variant-a .card.ghost::before { display: none; }
+  #variant-a .card.ghost:hover { transform: none; border-color: rgba(212,175,55,.4); box-shadow: none; color: var(--gold); }
+
+  #variant-a .footer { text-align: center; color: var(--muted); font-size: 13px; padding: 8px 0 40px; }
+
+  /* ====================================================================
+     VARIANT B — BOLDER NEON GAMER
+     near-black, Fira Code/Sans, neon edges, esports-dashboard energy
+     ==================================================================== */
+  #variant-b {
+    --neon: #2dd4bf;
+    --neon-2: #38bdf8;
+    --amber: #facc15;
+    --bg: #020617;
+    --panel: #0b1120;
+    --panel-2: #0e1729;
+    --line: #1e293b;
+    --text: #f8fafc;
+    --mut: #64748b;
+    background:
+      radial-gradient(900px 480px at 85% -6%, rgba(45,212,191,.14), transparent 60%),
+      radial-gradient(800px 460px at 6% 4%, rgba(56,189,248,.10), transparent 60%),
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 44px,
+      var(--bg);
+    min-height: 100vh; color: var(--text);
+    font-family: 'Fira Sans', system-ui, sans-serif;
+  }
+  #variant-b .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  #variant-b .topbar { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; border-bottom: 1px solid var(--line); }
+  #variant-b .wordmark { font-family: 'Fira Code', monospace; font-weight: 700; font-size: 15px; letter-spacing: .02em; color: var(--text); }
+  #variant-b .wordmark .br { color: var(--neon); }
+  #variant-b .topnav { display: flex; gap: 8px; }
+  #variant-b .topnav a {
+    font-family: 'Fira Code', monospace; font-size: 12px; color: var(--mut);
+    text-decoration: none; padding: 6px 12px; border: 1px solid transparent; border-radius: 6px;
+    transition: all .15s ease;
+  }
+  #variant-b .topnav a:hover { color: var(--neon); border-color: rgba(45,212,191,.4); }
+
+  #variant-b .hero { padding: 58px 0 30px; }
+  #variant-b .kicker {
+    font-family: 'Fira Code', monospace; font-size: 13px; color: var(--neon);
+    letter-spacing: .1em; margin-bottom: 18px;
+  }
+  #variant-b h1 {
+    font-family: 'Fira Code', monospace; font-weight: 700;
+    font-size: clamp(38px, 7vw, 74px); line-height: .98; margin: 0; letter-spacing: -.01em;
+    color: var(--text);
+  }
+  #variant-b h1 .hl { color: var(--neon); text-shadow: 0 0 26px rgba(45,212,191,.55); }
+  #variant-b .underline { width: 110px; height: 4px; margin-top: 22px; background: linear-gradient(90deg, var(--neon), var(--neon-2)); box-shadow: 0 0 18px rgba(45,212,191,.7); border-radius: 2px; }
+  #variant-b .subtitle { max-width: 540px; margin: 22px 0 0; color: #94a3b8; font-size: 16px; line-height: 1.6; }
+
+  #variant-b .stats { display: flex; gap: 0; margin: 30px 0 8px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; width: fit-content; }
+  #variant-b .stat { padding: 14px 26px; border-right: 1px solid var(--line); }
+  #variant-b .stat:last-child { border-right: none; }
+  #variant-b .stat .n { font-family: 'Fira Code', monospace; font-size: 22px; font-weight: 700; color: var(--neon); }
+  #variant-b .stat .l { font-family: 'Fira Code', monospace; font-size: 11px; color: var(--mut); letter-spacing: .12em; text-transform: uppercase; margin-top: 2px; }
+
+  #variant-b .section-label { font-family: 'Fira Code', monospace; font-size: 12px; color: var(--mut); letter-spacing: .16em; text-transform: uppercase; margin: 46px 0 18px; }
+  #variant-b .section-label .c { color: var(--neon); }
+
+  #variant-b .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; padding-bottom: 80px; }
+  #variant-b .card {
+    position: relative; background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+    text-decoration: none; color: inherit; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+  }
+  #variant-b .card:hover {
+    border-color: rgba(45,212,191,.7);
+    box-shadow: 0 0 0 1px rgba(45,212,191,.4), 0 0 36px -6px rgba(45,212,191,.5);
+    transform: translateY(-3px);
+  }
+  #variant-b .card .cover {
+    position: relative; padding: 22px 20px 18px; border-bottom: 1px solid var(--line);
+    background: radial-gradient(420px 160px at 80% 0%, rgba(56,189,248,.12), transparent 70%);
+  }
+  #variant-b .live { position: absolute; top: 16px; right: 16px; font-family: 'Fira Code', monospace; font-size: 10px; letter-spacing: .14em; color: var(--neon); display: flex; align-items: center; gap: 6px; }
+  #variant-b .live .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--neon); box-shadow: 0 0 8px var(--neon); animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+  #variant-b .readout-label { font-family: 'Fira Code', monospace; font-size: 11px; color: var(--mut); letter-spacing: .14em; text-transform: uppercase; }
+  #variant-b .readout { font-family: 'Fira Code', monospace; font-weight: 700; font-size: 46px; color: var(--neon); text-shadow: 0 0 22px rgba(45,212,191,.5); line-height: 1.1; letter-spacing: .02em; }
+  #variant-b .card-body { padding: 16px 20px 20px; }
+  #variant-b .card-name { font-family: 'Fira Code', monospace; font-weight: 700; font-size: 18px; margin: 0 0 12px; color: var(--text); }
+  #variant-b .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  #variant-b .chip { font-family: 'Fira Code', monospace; font-size: 11px; color: #cbd5e1; background: rgba(56,189,248,.08); border: 1px solid var(--line); padding: 4px 10px; border-radius: 6px; letter-spacing: .04em; }
+  #variant-b .chip.accent { color: var(--neon); border-color: rgba(45,212,191,.4); background: rgba(45,212,191,.08); }
+  #variant-b .cta { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; font-family: 'Fira Code', monospace; font-size: 13px; font-weight: 600; color: #02120e; background: var(--neon); padding: 9px 16px; border-radius: 7px; box-shadow: 0 0 20px -4px rgba(45,212,191,.7); transition: filter .15s ease; }
+  #variant-b .card:hover .cta { filter: brightness(1.12); }
+  #variant-b .card.ghost { background: transparent; border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; min-height: 300px; }
+  #variant-b .card.ghost:hover { transform: none; border-color: rgba(45,212,191,.5); box-shadow: none; }
+  #variant-b .card.ghost .g { font-family: 'Fira Code', monospace; color: var(--mut); font-size: 13px; letter-spacing: .08em; text-align: center; }
+  #variant-b .card.ghost:hover .g { color: var(--neon); }
+
+  #variant-b .footer { font-family: 'Fira Code', monospace; color: var(--mut); font-size: 12px; padding: 6px 0 40px; border-top: 1px solid var(--line); margin-top: 10px; padding-top: 22px; }
+</style>
+</head>
+<body>
+
+<!-- ===== VARIANT TABS ===== -->
+<div id="variant-nav">
+  <span class="label">Sketch 001 · Landing direction</span>
+  <button class="variant-tab active" onclick="showVariant('a', this)">A · Elevated Wuxia ★ Selected</button>
+  <button class="variant-tab" onclick="showVariant('b', this)">B · Bolder Neon Gamer</button>
+</div>
+
+<div id="stage">
+
+  <!-- ============================ VARIANT A ============================ -->
+  <div id="variant-a" class="variant active">
+    <div class="wrap">
+      <div class="topbar">
+        <div class="wordmark">GAME TOOLS<span class="dot"> ·</span> HUB</div>
+        <nav class="topnav">
+          <a href="#">Games</a>
+          <a href="#">About</a>
+        </nav>
+      </div>
+
+      <section class="hero">
+        <div class="kicker">Companion Tools for the Games You Play</div>
+        <h1>Game Tools <em>Hub</em></h1>
+        <p class="subtitle">Dependable, browser-based companions that work mid-match — built one game and one tool at a time.</p>
+        <div class="filigree"><span class="line"></span><span class="diamond"></span><span class="line r"></span></div>
+      </section>
+
+      <div class="section-label">Supported Games</div>
+      <div class="grid">
+        <a class="card" href="#">
+          <div class="cover">
+            <div class="seal">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 19l5-7 3 4 3-6 4 9"/><path d="M3 19h16" stroke="#3fb98f"/>
+              </svg>
+            </div>
+          </div>
+          <div class="card-body">
+            <h2 class="card-name">Where Winds Meet</h2>
+            <p class="card-meta">1 tool · GvG jungle spawn timing</p>
+            <span class="tag">◆ Spawn Timer</span>
+          </div>
+        </a>
+        <div class="card ghost">More games — coming as they're played</div>
+      </div>
+
+      <div class="footer">Game Tools Hub — a personal project</div>
+    </div>
+  </div>
+
+  <!-- ============================ VARIANT B ============================ -->
+  <div id="variant-b" class="variant">
+    <div class="wrap">
+      <div class="topbar">
+        <div class="wordmark">game_tools<span class="br">.</span>hub</div>
+        <nav class="topnav">
+          <a href="#">[ games ]</a>
+          <a href="#">[ about ]</a>
+        </nav>
+      </div>
+
+      <section class="hero">
+        <div class="kicker">// game companion toolkit</div>
+        <h1>GAME_TOOLS<br><span class="hl">HUB</span></h1>
+        <div class="underline"></div>
+        <p class="subtitle">Browser-native tools that hold up mid-match. No installs, no logins — open the tab and go.</p>
+        <div class="stats">
+          <div class="stat"><div class="n">01</div><div class="l">games</div></div>
+          <div class="stat"><div class="n">01</div><div class="l">tools</div></div>
+          <div class="stat"><div class="n">&#8734;</div><div class="l">soon</div></div>
+        </div>
+      </section>
+
+      <div class="section-label"><span class="c">&gt;</span> supported_games</div>
+      <div class="grid">
+        <a class="card" href="#">
+          <div class="cover">
+            <div class="live"><span class="pulse"></span> READY</div>
+            <div class="readout-label">next spawn</div>
+            <div class="readout" id="mock-timer">02:59</div>
+          </div>
+          <div class="card-body">
+            <h2 class="card-name">WHERE WINDS MEET</h2>
+            <div class="chips">
+              <span class="chip accent">GvG</span>
+              <span class="chip">SPAWN TIMER</span>
+              <span class="chip">1 TOOL</span>
+            </div>
+            <span class="cta">OPEN &#8594;</span>
+          </div>
+        </a>
+        <div class="card ghost"><div class="g">+ add_game<br><span style="opacity:.6">// coming soon</span></div></div>
+      </div>
+
+      <div class="footer">game_tools.hub &mdash; personal project // static on github pages</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== SKETCH TOOLBAR ===== -->
+<div id="sketch-tools">
+  <span class="vp-label">viewport</span>
+  <button onclick="setVP(375,this)">375</button>
+  <button onclick="setVP(768,this)">768</button>
+  <button onclick="setVP(1280,this)">1280</button>
+  <button class="active" onclick="setVP(0,this)">full</button>
+</div>
+
+<script>
+  function showVariant(id, btn) {
+    document.querySelectorAll('.variant').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.variant-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('variant-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+  function setVP(px, btn) {
+    document.getElementById('stage').style.maxWidth = px ? px + 'px' : 'none';
+    document.querySelectorAll('#sketch-tools button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // Make the neon card feel alive — a looping mock spawn countdown.
+  (function () {
+    var t = 179; // 2:59
+    var el = document.getElementById('mock-timer');
+    setInterval(function () {
+      t = t <= 0 ? 179 : t - 1;
+      var m = String(Math.floor(t / 60)).padStart(2, '0');
+      var s = String(t % 60).padStart(2, '0');
+      if (el) el.textContent = m + ':' + s;
+    }, 1000);
+  })();
+</script>
+</body>
+</html>
