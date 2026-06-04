@@ -1,0 +1,268 @@
+/* ==========================================================================
+   shared/theme.css — Base dark-theme tokens + per-game accent override
+   Defines all CSS custom properties for the Game Tools Hub.
+   Consumed by every page via root-absolute <link rel="stylesheet" href="/shared/theme.css">.
+   This file is defined once and never re-edited for new games/tools; game pages
+   apply their accent via data-game attribute (see Per-Game Accent section below).
+   ========================================================================== */
+
+/* ==========================================================================
+   Global Reset + Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: var(--text-body);
+  line-height: 1.5;
+  font-feature-settings: "kern" 1;
+}
+
+/* ==========================================================================
+   Design Tokens — Base (neutral dark hub theme)
+   ========================================================================== */
+
+:root {
+  /* Color — neutral dark ink palette */
+  --color-bg:              #0f1115;   /* 60% dominant — page backgrounds */
+  --color-surface:         #1a1d23;   /* 30% secondary — cards, header, breadcrumb band */
+  --color-surface-raised:  #22262f;   /* hover state on cards (lifted surface) */
+  --color-border:          #2a2e38;   /* subtle dividers, card edges */
+  --color-text-primary:    #e8e4d8;   /* body copy, headings — parchment-neutral */
+  --color-text-secondary:  #9a9690;   /* muted labels, tool-count line, breadcrumb separators */
+
+  /* Accent defaults — neutral hub; same jade/gold so hub card looks on-theme.
+     Overridden per-game via the [data-game] blocks below. */
+  --color-accent:           #3fb98f;  /* jade */
+  --color-accent-secondary: #d4af37;  /* gold */
+
+  /* Spacing scale — multiples of 4px */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* Typography */
+  --text-body:    16px;   /* line-height 1.5 on body */
+  --text-label:   14px;   /* line-height 1.4 */
+  --text-heading: 20px;   /* line-height 1.2, weight 600 */
+  --text-display: 28px;   /* line-height 1.1, weight 600 */
+}
+
+/* ==========================================================================
+   Per-Game Accent Override Mechanism
+   Set data-game="<slug>" on <body> to activate the game's accent colors.
+   Hub landing does NOT set this attribute — it stays neutral.
+   ========================================================================== */
+
+[data-game="where-winds-meet"] {
+  --color-accent:           #3fb98f;  /* jade — locked D-02 */
+  --color-accent-secondary: #d4af37;  /* gold — locked D-02 */
+}
+
+/* ==========================================================================
+   Shared Component: Site Header
+   A surface-colored band containing the site title.
+   ========================================================================== */
+
+.site-header {
+  background: var(--color-surface);
+  padding: var(--space-md) var(--space-xl);
+}
+
+.site-title {
+  font-size: var(--text-display);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+}
+
+/* ==========================================================================
+   Shared Component: Card Grid
+   Responsive auto-fill grid. auto-fill (NOT auto-fit) keeps card at natural
+   width and centers with justify-content; auto-fit would stretch cards on
+   wide viewports beyond the minmax constraint. (RESEARCH Pitfall 5)
+   ========================================================================== */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  justify-content: center;       /* single card stays centered, not left-flush */
+  gap: var(--space-lg);
+  max-width: 960px;
+  margin-inline: auto;
+  padding-inline: var(--space-xl);
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-2xl);
+}
+
+@media (max-width: 600px) {
+  .card-grid {
+    padding-inline: var(--space-md);
+  }
+}
+
+/* ==========================================================================
+   Shared Component: Card
+   Full-card anchor link with cover-art panel, name, and tool count.
+   ========================================================================== */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-accent);
+  border-radius: 8px;
+  min-height: 220px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.card:hover {
+  background: var(--color-surface-raised);
+  border-color: var(--color-accent);
+}
+
+.card:active {
+  opacity: 0.9;
+}
+
+/* Cover art panel — fixed 160px height, holds the cover SVG/image */
+.card__cover {
+  height: 160px;
+  background: var(--color-surface-raised);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.card__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Card body — name + tool count */
+.card__body {
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex: 1;
+}
+
+.card__name {
+  margin: 0;
+  font-size: var(--text-heading);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+}
+
+.card__count {
+  margin: 0;
+  font-size: var(--text-label);
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+}
+
+/* ==========================================================================
+   Shared Component: .card--no-cover modifier
+   For tool cards (plan 02) that have no cover image. Collapses the 160px
+   cover panel footprint so .card__body sits directly under the accent top
+   border with normal body padding — no empty panel, no gap.
+   Tool cards in plan 02 render as <a class="card card--no-cover"> with only
+   a .card__body and no .card__cover element.
+   The card top border, radius, hover, and min-height still apply.
+   ========================================================================== */
+
+.card--no-cover .card__cover {
+  display: none;
+}
+
+/* ==========================================================================
+   Shared Component: Site Footer
+   ========================================================================== */
+
+.site-footer {
+  font-size: var(--text-label);
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-lg);
+}
+
+/* ==========================================================================
+   Shared Component: Accessible Breadcrumb
+   Scoped to nav[aria-label="Breadcrumb"] (also class-hooked as .site-breadcrumb).
+   Separators are CSS-generated via li + li::before so screen readers do NOT
+   announce the slash characters. (RESEARCH Pitfall 4 / W3C APG pattern)
+   ========================================================================== */
+
+nav[aria-label="Breadcrumb"],
+.site-breadcrumb {
+  background: var(--color-bg);  /* slightly recessed from header surface */
+}
+
+.site-breadcrumb ol,
+nav[aria-label="Breadcrumb"] ol {
+  list-style: none;
+  margin: 0;
+  padding: 12px var(--space-xl);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.site-breadcrumb li,
+nav[aria-label="Breadcrumb"] li {
+  font-size: var(--text-label);
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+}
+
+/* CSS-generated separator — NOT in markup so screen readers skip it */
+.site-breadcrumb li + li::before,
+nav[aria-label="Breadcrumb"] li + li::before {
+  content: " / ";
+  color: var(--color-text-secondary);
+  padding: 0 var(--space-xs);
+}
+
+.site-breadcrumb a,
+nav[aria-label="Breadcrumb"] a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+}
+
+.site-breadcrumb a:hover,
+nav[aria-label="Breadcrumb"] a:hover {
+  color: var(--color-text-primary);
+}
+
+/* Active/current page segment — styled with accent, not a link */
+.site-breadcrumb [aria-current="page"],
+nav[aria-label="Breadcrumb"] [aria-current="page"] {
+  color: var(--color-accent);
+}
