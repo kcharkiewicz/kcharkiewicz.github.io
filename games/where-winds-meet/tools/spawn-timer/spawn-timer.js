@@ -486,12 +486,68 @@ if (typeof document !== 'undefined') {
     // Show idle cycle counter preview if starting fresh
     if (state.phase === 'idle') updateCycleCounterIdle();
 
-    // AudioContext resume on tab visibility return (iOS Safari 'interrupted' state)
-    // Also triggers background catch-up (Task 3 extends this handler)
+    // AudioContext resume + background-tab cycle catch-up
+    // Fires when the tab returns to the foreground after being hidden.
     document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible' && audioCtx) {
+      if (document.visibilityState !== 'visible') return;
+
+      // iOS Safari 'interrupted' state: resume AudioContext on foreground return
+      if (audioCtx) {
         audioCtx.resume().catch(() => {});
       }
+
+      // Background catch-up: if the timer was running while hidden, cycles may
+      // have elapsed without being detected (Pitfall 2 — main-thread message delay)
+      if (state.phase !== 'running') return;
+
+      const now = Date.now();
+      const remaining = state.cycleEnd - now;
+
+      if (remaining >= 0) {
+        // Timer is still mid-cycle — no catch-up needed; just update the display
+        updateDisplay(remaining);
+        return;
+      }
+
+      // remaining < 0 → at least one cycle deadline has passed while backgrounded
+      // Compute how many full cycles elapsed since the deadline
+      // elapsed since the deadline = (now - cycleEnd) + one full cycle
+      const elapsedSinceDeadline = now - state.cycleEnd + state.durationMs;
+      const missed = missedCycles(elapsedSinceDeadline, state.durationMs);
+      // missed ≥ 1; it includes the cycle whose deadline just passed
+
+      if (state.unlimited) {
+        // Unlimited: advance by missed cycles (no upper bound)
+        state.cycleIndex += missed;
+        state.cycleEnd = state.cycleEnd + missed * state.durationMs;
+      } else {
+        // Finite: advance but do not exceed the last cycle index
+        const cyclesLeft = state.totalCycles - 1 - state.cycleIndex;
+        const advance    = Math.min(missed, cyclesLeft);
+        state.cycleIndex += advance;
+        state.cycleEnd = state.cycleEnd + advance * state.durationMs;
+
+        if (isLastCycle(state.cycleIndex, state.totalCycles, state.unlimited) &&
+            state.cycleEnd - now <= 0) {
+          // The final cycle also expired while backgrounded → finish
+          playBeep(); // exactly one beep on return (Pitfall 2 cap)
+          flashDisplay();
+          stopWorker();
+          timerDisplay.textContent = '00:00';
+          setTimerState('finished');
+          unlockConfigInputs();
+          updateCycleCounter();
+          saveTimerState({ ...state, phase: 'finished' });
+          return;
+        }
+      }
+
+      // Fire exactly one beep on return regardless of how many cycles elapsed
+      playBeep();
+      flashDisplay();
+      updateCycleCounter();
+      updateDisplay(state.cycleEnd - now);
+      saveTimerState({ ...state, phase: 'running' });
     });
 
     // ── Start button ────────────────────────────────────────────────────────────
