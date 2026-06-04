@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spawn Timer — Where Winds Meet — Game Tools Hub</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/shared/theme.css">
+</head>
+<body data-game="where-winds-meet">
+  <header class="site-header">
+    <span class="site-title">Game Tools Hub</span>
+  </header>
+
+  <nav aria-label="Breadcrumb" id="breadcrumb">
+    <ol>
+      <li><a href="/">Game Tools Hub</a></li>
+      <li><a href="/games/where-winds-meet/">Where Winds Meet</a></li>
+      <li><span aria-current="page">Spawn Timer</span></li>
+    </ol>
+  </nav>
+
+  <main style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 200px); padding: var(--space-xl);">
+    <div style="text-align: center; max-width: 480px;">
+      <h1 style="font-size: var(--text-heading); font-weight: 600; line-height: 1.2; margin: 0 0 var(--space-sm);">Spawn Timer</h1>
+      <p style="font-size: var(--text-label); color: var(--color-text-secondary); margin: 0 0 var(--space-lg);">GvG jungle spawn timer</p>
+      <p style="font-size: var(--text-body); color: var(--color-text-secondary); margin: 0;">Coming in Phase 2. This page is your bookmark — the timer will load here when it's ready.</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">Game Tools Hub — personal project</footer>
+
+  <script>
+    // Breadcrumb renderer — reuses the same pattern as the game page.
+    // Ancestors get <a href> links; the final item (href: null) gets
+    // <span aria-current="page"> (not a link). Separators are CSS-generated
+    // via li + li::before in theme.css — NOT in the markup
+    // (RESEARCH Pitfall 4: CSS-generated separators are screen-reader safe).
+    // SECURITY: All values are static developer-defined literals.
+    const breadcrumbItems = [
+      { label: "Game Tools Hub", href: "/" },
+      { label: "Where Winds Meet", href: "/games/where-winds-meet/" },
+      { label: "Spawn Timer", href: null }
+    ];
+
+    function renderBreadcrumb(items, containerId) {
+      const listItems = items.map(item => {
+        if (item.href !== null) {
+          return `<li><a href="${item.href}">${item.label}</a></li>`;
+        } else {
+          return `<li><span aria-current="page">${item.label}</span></li>`;
+        }
+      }).join('');
+      document.getElementById(containerId).innerHTML = `<ol>${listItems}</ol>`;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      renderBreadcrumb(breadcrumbItems, 'breadcrumb');
+    });
+  </script>
+</body>
+</html>
