@@ -354,6 +354,7 @@ if (typeof document !== 'undefined') {
       state.cycleEnd = Date.now() + state.durationMs;
       saveTimerState({ ...state, phase: 'running' });
       updateCycleCounter();
+      updateDisplay(state.durationMs); // reset display immediately at new cycle start
     }
   }
 
