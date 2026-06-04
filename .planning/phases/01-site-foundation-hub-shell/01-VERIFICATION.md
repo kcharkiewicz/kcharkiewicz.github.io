@@ -1,8 +1,8 @@
 ---
 phase: 01-site-foundation-hub-shell
 verified: 2026-06-04T00:00:00Z
-status: human_needed
-score: 5/5 must-haves verified (automated); 4 items require human eyeball
+status: passed
+score: 5/5 must-haves verified (automated + human sign-off 2026-06-04)
 overrides_applied: 0
 human_verification:
   - test: "Visit https://kcharkiewicz.github.io/ in a browser"
