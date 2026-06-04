@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Tools Hub</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/shared/theme.css">
+</head>
+<body>
+  <header class="site-header">
+    <span class="site-title">Game Tools Hub</span>
+  </header>
+
+  <main>
+    <div id="card-grid" class="card-grid"></div>
+  </main>
+
+  <footer class="site-footer">Game Tools Hub — personal project</footer>
+
+  <script>
+    // Games registry — add a new game by inserting one object here.
+    // No other file edits required (CF-04 / HUB-05).
+    // SECURITY: All values are static developer-defined literals.
+    // Never pass location.href, URL params, or any user-supplied string into innerHTML.
+    const games = [
+      {
+        slug: "where-winds-meet",
+        name: "Where Winds Meet",
+        toolCount: 1,
+        href: "/games/where-winds-meet/",
+        cover: "/games/where-winds-meet/cover.svg"
+      }
+    ];
+
+    /**
+     * Renders a list of game/tool items as card links into a container element.
+     * @param {Array} items - Registry entries with slug, name, toolCount, href, cover.
+     * @param {string} containerId - The id of the container element.
+     */
+    function renderCards(items, containerId) {
+      const html = items.map(item => `
+        <a class="card" href="${item.href}">
+          <div class="card__cover">
+            <img src="${item.cover}" alt="${item.name} cover art" width="280" height="160">
+          </div>
+          <div class="card__body">
+            <h2 class="card__name">${item.name}</h2>
+            <p class="card__count">${item.toolCount} tool${item.toolCount !== 1 ? 's' : ''}</p>
+          </div>
+        </a>
+      `).join('');
+      document.getElementById(containerId).innerHTML = html;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      renderCards(games, 'card-grid');
+    });
+  </script>
+</body>
+</html>
