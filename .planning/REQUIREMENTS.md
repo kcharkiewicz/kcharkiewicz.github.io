@@ -10,15 +10,15 @@ Requirements for the initial release. Each maps to roadmap phases.
 ### Site & Deployment
 
 - [ ] **SITE-01**: Site is deployed to GitHub Pages and reachable at kcharkiewicz.github.io
-- [ ] **SITE-02**: Static delivery is robust against GitHub Pages pitfalls (`.nojekyll` present, all-lowercase paths, case-consistent links)
+- [x] **SITE-02**: Static delivery is robust against GitHub Pages pitfalls (`.nojekyll` present, all-lowercase paths, case-consistent links)
 
 ### Hub & Navigation
 
-- [ ] **HUB-01**: User sees a landing page listing supported games as cards, each linking to that game's page
+- [x] **HUB-01**: User sees a landing page listing supported games as cards, each linking to that game's page
 - [ ] **HUB-02**: User sees a Where Winds Meet game page listing its tools, each linking to the tool's page
 - [ ] **HUB-03**: User has consistent header and back/up navigation on every page
 - [ ] **HUB-04**: URLs map to the hierarchy (`/`, `/where-winds-meet/`, `/where-winds-meet/spawn-timer/`) so any page is bookmarkable
-- [ ] **HUB-05**: A new game page or tool can be added as a drop-in registry entry without restructuring existing pages
+- [x] **HUB-05**: A new game page or tool can be added as a drop-in registry entry without restructuring existing pages
 
 ### Timer
 
@@ -47,9 +47,9 @@ Requirements for the initial release. Each maps to roadmap phases.
 
 ### Theme / UX
 
-- [ ] **THEME-01**: Dark, gamer-themed visual style applied consistently across hub, game, and tool pages
-- [ ] **THEME-02**: Per-game accent color (Where Winds Meet) layered over the base dark theme
-- [ ] **THEME-03**: Custom SVG favicon reflecting the hub identity
+- [x] **THEME-01**: Dark, gamer-themed visual style applied consistently across hub, game, and tool pages
+- [x] **THEME-02**: Per-game accent color (Where Winds Meet) layered over the base dark theme
+- [x] **THEME-03**: Custom SVG favicon reflecting the hub identity
 - [ ] **THEME-04**: Responsive layout with large touch targets, usable on a phone as a second screen
 - [ ] **THEME-05**: Readable contrast (WCAG AA minimum) with a crisp, high-contrast time display
 
@@ -101,15 +101,15 @@ Which phases cover which requirements. Populated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | SITE-01 | Phase 1 | Pending |
-| SITE-02 | Phase 1 | Pending |
-| HUB-01 | Phase 1 | Pending |
+| SITE-02 | Phase 1 | Complete |
+| HUB-01 | Phase 1 | Complete |
 | HUB-02 | Phase 1 | Pending |
 | HUB-03 | Phase 1 | Pending |
 | HUB-04 | Phase 1 | Pending |
-| HUB-05 | Phase 1 | Pending |
-| THEME-01 | Phase 1 | Pending |
-| THEME-02 | Phase 1 | Pending |
-| THEME-03 | Phase 1 | Pending |
+| HUB-05 | Phase 1 | Complete |
+| THEME-01 | Phase 1 | Complete |
+| THEME-02 | Phase 1 | Complete |
+| THEME-03 | Phase 1 | Complete |
 | TIMER-01 | Phase 2 | Pending |
 | TIMER-02 | Phase 2 | Pending |
 | TIMER-03 | Phase 2 | Pending |
@@ -130,6 +130,7 @@ Which phases cover which requirements. Populated during roadmap creation.
 | THEME-04 | Phase 5 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 28 total
 - Mapped to phases: 28 ✓
 - Unmapped: 0 ✓
