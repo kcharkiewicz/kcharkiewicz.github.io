@@ -58,6 +58,90 @@ export function formatRemaining(ms) {
   return `${mm}:${ss}`;
 }
 
+// ── Cycle / deadline helpers (exported for node:test coverage) ───────────────
+
+/**
+ * cycleLabel(cycleIndex, totalCycles, unlimited) — build the cycle counter string.
+ * Returns "Cycle {N} / {total}" or "Cycle {N} / ∞" for unlimited mode.
+ * SECURITY: all inputs are numbers/booleans; result written via textContent.
+ *
+ * @param {number} cycleIndex — 0-based current cycle
+ * @param {number} totalCycles — total configured cycles (ignored when unlimited)
+ * @param {boolean} unlimited — true → infinite cycles
+ * @returns {string}
+ */
+export function cycleLabel(cycleIndex, totalCycles, unlimited) {
+  const current = cycleIndex + 1;
+  const total = unlimited ? '∞' : totalCycles;
+  return `Cycle ${current} / ${total}`;
+}
+
+/**
+ * resumeDeadline(cycleEnd, pausedAt, now) — shift the cycle deadline forward by
+ * the pause duration so the remaining display is preserved exactly on resume.
+ * Pattern 5 / Pitfall 7: cycleEnd += now - pausedAt
+ *
+ * @param {number} cycleEnd — original absolute epoch deadline (ms)
+ * @param {number} pausedAt — epoch timestamp when Pause was pressed
+ * @param {number} now — current epoch timestamp (Date.now() at Resume press)
+ * @returns {number} adjusted epoch deadline
+ */
+export function resumeDeadline(cycleEnd, pausedAt, now) {
+  return cycleEnd + (now - pausedAt);
+}
+
+/**
+ * isLastCycle(cycleIndex, totalCycles, unlimited) — true if this is the final
+ * cycle and the timer should transition to 'finished' after it ends.
+ * Unlimited timers never return true.
+ *
+ * @param {number} cycleIndex — 0-based current cycle
+ * @param {number} totalCycles — total configured cycles
+ * @param {boolean} unlimited
+ * @returns {boolean}
+ */
+export function isLastCycle(cycleIndex, totalCycles, unlimited) {
+  return !unlimited && cycleIndex >= totalCycles - 1;
+}
+
+/**
+ * missedCycles(elapsedMs, durationMs) — number of complete cycles that elapsed
+ * in a given time window. Used for background-tab catch-up.
+ * Guards against durationMs=0 (divide-by-zero).
+ *
+ * @param {number} elapsedMs — elapsed time in ms
+ * @param {number} durationMs — cycle duration in ms
+ * @returns {number} floor(elapsedMs / durationMs), or 0 if durationMs <= 0
+ */
+export function missedCycles(elapsedMs, durationMs) {
+  if (durationMs <= 0) return 0;
+  return Math.floor(elapsedMs / durationMs);
+}
+
+/**
+ * parseRepeat(rawValue, unlimitedChecked) — validate the Repeat field.
+ * Returns { unlimited: true } when the checkbox is checked.
+ * Returns an integer >= 1 for valid finite input.
+ * Returns null for any invalid input (0, negative, non-integer, empty).
+ * SECURITY: input is validated to positive integer; no raw value rendered.
+ *
+ * @param {string} rawValue — the text/number input value
+ * @param {boolean} unlimitedChecked — whether the Unlimited checkbox is checked
+ * @returns {{ unlimited: true } | number | null}
+ */
+export function parseRepeat(rawValue, unlimitedChecked) {
+  if (unlimitedChecked) return { unlimited: true };
+
+  const trimmed = (rawValue || '').trim();
+  if (!trimmed) return null;
+
+  // Must be a plain integer (no decimal point, no sign characters)
+  if (!/^\d+$/.test(trimmed)) return null;
+
+  const n = parseInt(trimmed, 10);
+  return n >= 1 ? n : null;
+}
+
 // ── Module state ──────────────────────────────────────────────────────────────
 // Guards below ensure the runtime layer only wires up in a browser context.
 // Node.js (node:test) imports the exported pure functions above without
