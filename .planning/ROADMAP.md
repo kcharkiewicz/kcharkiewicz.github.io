@@ -31,7 +31,11 @@
   3. Every page, asset link, and internal URL works on the live GitHub Pages deployment (no 404s, no Jekyll-dropped files, all-lowercase paths)
   4. Adding a second game to the hub requires only inserting one entry into the games registry array — no structural changes to existing files
   5. The site renders with the dark gamer-themed visual style and the Where Winds Meet accent color, with a custom favicon in the browser tab
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 01-01-PLAN.md — Walking-skeleton spine: .nojekyll guard, shared theme tokens + accent mechanism, favicon, hub landing page with registry/card renderer
+- [ ] 01-02-PLAN.md — Full hierarchy: WWM game page with breadcrumb + tools registry, drop-in cover SVG, themed spawn-timer stub page (no 404)
+- [ ] 01-03-PLAN.md — Deploy + verify: case audit, push, enable GitHub Pages, live curl smoke tests, drop-in extensibility check
 **UI hint**: yes
 
 ### Phase 2: Timer Core
@@ -90,7 +94,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Site Foundation + Hub Shell | 0/? | Not started | - |
+| 1. Site Foundation + Hub Shell | 0/3 | Not started | - |
 | 2. Timer Core | 0/? | Not started | - |
 | 3. Preset Manager | 0/? | Not started | - |
 | 4. Audio Controls | 0/? | Not started | - |
@@ -99,4 +103,4 @@
 ---
 
 *Roadmap created: 2026-06-04*
-*Last updated: 2026-06-04 after initial roadmap creation*
+*Last updated: 2026-06-04 after Phase 1 planning (3 plans created)*
