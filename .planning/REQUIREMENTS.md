@@ -100,40 +100,40 @@ Which phases cover which requirements. Populated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SITE-01 | TBD | Pending |
-| SITE-02 | TBD | Pending |
-| HUB-01 | TBD | Pending |
-| HUB-02 | TBD | Pending |
-| HUB-03 | TBD | Pending |
-| HUB-04 | TBD | Pending |
-| HUB-05 | TBD | Pending |
-| TIMER-01 | TBD | Pending |
-| TIMER-02 | TBD | Pending |
-| TIMER-03 | TBD | Pending |
-| TIMER-04 | TBD | Pending |
-| TIMER-05 | TBD | Pending |
-| TIMER-06 | TBD | Pending |
-| TIMER-07 | TBD | Pending |
-| TIMER-08 | TBD | Pending |
-| ALERT-01 | TBD | Pending |
-| ALERT-02 | TBD | Pending |
-| ALERT-03 | TBD | Pending |
-| ALERT-04 | TBD | Pending |
-| PRESET-01 | TBD | Pending |
-| PRESET-02 | TBD | Pending |
-| PRESET-03 | TBD | Pending |
-| PRESET-04 | TBD | Pending |
-| THEME-01 | TBD | Pending |
-| THEME-02 | TBD | Pending |
-| THEME-03 | TBD | Pending |
-| THEME-04 | TBD | Pending |
-| THEME-05 | TBD | Pending |
+| SITE-01 | Phase 1 | Pending |
+| SITE-02 | Phase 1 | Pending |
+| HUB-01 | Phase 1 | Pending |
+| HUB-02 | Phase 1 | Pending |
+| HUB-03 | Phase 1 | Pending |
+| HUB-04 | Phase 1 | Pending |
+| HUB-05 | Phase 1 | Pending |
+| THEME-01 | Phase 1 | Pending |
+| THEME-02 | Phase 1 | Pending |
+| THEME-03 | Phase 1 | Pending |
+| TIMER-01 | Phase 2 | Pending |
+| TIMER-02 | Phase 2 | Pending |
+| TIMER-03 | Phase 2 | Pending |
+| TIMER-04 | Phase 2 | Pending |
+| TIMER-05 | Phase 2 | Pending |
+| TIMER-06 | Phase 2 | Pending |
+| TIMER-07 | Phase 2 | Pending |
+| TIMER-08 | Phase 2 | Pending |
+| ALERT-01 | Phase 2 | Pending |
+| ALERT-02 | Phase 2 | Pending |
+| THEME-05 | Phase 2 | Pending |
+| PRESET-01 | Phase 3 | Pending |
+| PRESET-02 | Phase 3 | Pending |
+| PRESET-03 | Phase 3 | Pending |
+| PRESET-04 | Phase 3 | Pending |
+| ALERT-03 | Phase 4 | Pending |
+| ALERT-04 | Phase 4 | Pending |
+| THEME-04 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 28 total
-- Mapped to phases: 0 (populated by roadmap)
-- Unmapped: 28 ⚠️
+- Mapped to phases: 28 ✓
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-06-04*
-*Last updated: 2026-06-04 after initial definition*
+*Last updated: 2026-06-04 after roadmap creation (traceability populated)*
