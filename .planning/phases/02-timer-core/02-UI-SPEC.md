@@ -80,7 +80,8 @@ Exceptions:
 
 ## Typography
 
-System font stack only. Three base roles inherited from `/shared/theme.css`, plus one
+System font stack only. **Exactly four** type roles are actively consumed by timer
+components in this phase: three base roles inherited from `/shared/theme.css` plus one
 **tool-scoped display role** for the large countdown. The countdown is the only new
 type treatment and reuses existing weights — no new font weights are introduced.
 
@@ -89,8 +90,15 @@ type treatment and reuses existing weights — no new font weights are introduce
 | Body | `--text-body` | 16px | 400 | 1.5 | Helper text, hints below inputs |
 | Label | `--text-label` | 14px | 400 | 1.4 | Field labels ("Duration", "Repeat"), cycle counter |
 | Heading | `--text-heading` | 20px | 600 | 1.2 | Tool `<h1>` "Spawn Timer", config section heading |
-| Display (base) | `--text-display` | 28px | 600 | 1.1 | Reserved — site header title only |
 | **Countdown (tool)** | tool-scoped, see below | **clamp 56px → 112px** | 600 | 1.0 | The large MM:SS countdown readable at arm's length |
+
+> **Inherited shell token — NOT consumed by any timer component in this phase.**
+> `--text-display` (28px / 600 / 1.1) is a shared Phase 1 token defined in
+> `/shared/theme.css` and used ONLY by the site-header title (`.site-title`), which is
+> part of the inherited page shell rendered around — not by — this phase. No timer
+> component (countdown, cycle counter, config field, control, state label) renders at
+> `--text-display`. It is documented here for reference only and is **excluded from this
+> phase's active four-size type scale**.
 
 **Countdown sizing (TIMER-05, THEME-05):**
 ```css
@@ -347,7 +355,10 @@ The JS toggles `.is-flashing` at the cycle boundary and removes it on `animation
 | Error state — invalid repeat | "Repeat must be 1 or more, or choose Unlimited." (inline under the Repeat field) |
 
 **Primary CTA:** "Start" (idle/finished) and "Resume" (paused) are the primary jade
-buttons. They are the verb+context the user reaches for.
+buttons. Single-word, imperative control labels ("Start", "Pause", "Resume", "Reset")
+are deliberate: they match established timer/stopwatch convention where a one-word verb
+is the clearest, fastest-to-parse control during live gameplay. (Accepted as a
+non-blocking FLAG by the checker — intentional, not an omission.)
 
 **Empty state:** There is no data-fetch empty state. The idle state shows the configured
 duration as the countdown preview with a Start button — the page is never blank.
@@ -422,7 +433,9 @@ responsive layout — `clamp()` + a single media query handle it.
 5. Use `font-variant-numeric: tabular-nums` on the countdown and cycle counter.
 6. Config inputs: while running/paused, set the `disabled` attribute AND apply the 40%
    opacity via the `data-state` selector (the panel-level opacity rule covers the visual).
-7. No new font weights — countdown uses the existing 600.
+7. No new font weights — countdown uses the existing 600. The phase's active type scale
+   is exactly four sizes (14/16/20px + the clamp countdown); `--text-display` (28px) is
+   shell-only and must NOT be applied to any timer component.
 8. Inline validation copy goes in `--color-text-secondary` (no red token exists; do not
    invent one).
 9. Asset/style paths root-absolute; filenames all-lowercase (Phase 1 convention).
