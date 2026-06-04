@@ -14,20 +14,19 @@ The hosted tools must work reliably in the browser during real gameplay — the 
 
 <!-- Shipped and confirmed valuable. -->
 
-(None yet — ship to validate)
+- [x] Hub landing page that lists supported games and links to each game's page — *Validated in Phase 1: Site Foundation + Hub Shell*
+- [x] A *Where Winds Meet* game page that collects its tools — *Validated in Phase 1*
+- [x] Gamer/themed visual style (dark, stylized) shared across the hub and game pages — *Validated in Phase 1*
+- [x] Site deploys to GitHub Pages and is reachable at kcharkiewicz.github.io — *Validated in Phase 1 (live, 3/3 URLs return 200)*
+- [x] Architecture makes adding a new game page and a new tool straightforward (no rework) — *Validated in Phase 1 (drop-in registry: one array entry → one card, proven by mutation)*
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-- [ ] Hub landing page that lists supported games and links to each game's page
-- [ ] A *Where Winds Meet* game page that collects its tools
 - [ ] GvG Jungle Spawn Timer: user sets a duration and a repeat count, clicks start, it counts down and repeats up to N cycles
 - [ ] Timer plays an audible alert at the end of each cycle (usable without looking at the screen)
 - [ ] Saved, named timer presets persisted in the browser (e.g. "Camp A = 3:00")
-- [ ] Gamer/themed visual style (dark, stylized) shared across the hub and game pages
-- [ ] Site deploys to GitHub Pages and is reachable at kcharkiewicz.github.io
-- [ ] Architecture makes adding a new game page and a new tool straightforward (no rework)
 
 ### Out of Scope
 
@@ -84,4 +83,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-06-04 after initialization*
+*Last updated: 2026-06-04 — Phase 1 (Site Foundation + Hub Shell) complete; site live at kcharkiewicz.github.io*
