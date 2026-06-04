@@ -110,7 +110,7 @@ _Task 4 (checkpoint:human-verify, blocking) is the manual browser checklist — 
 **Impact on plan:** Necessary for the test harness to run. No scope creep; no third-party packages added.
 
 ## Issues Encountered
-**Manual-verification checkpoint deferred.** Task 4 is a blocking `human-verify` gate (browser checklist: beep/flash, second-run beep, inline validation, 2-min background accuracy, responsive layout). At the user's direction the browser test was deferred to be performed alongside plan 02-02's checklist at the end of the phase. Implementation is complete and unit-tested; manual sign-off is pending.
+**Manual-verification checkpoint — passed (deferred then verified).** Task 4 is a blocking `human-verify` gate (browser checklist: beep/flash, second-run beep, inline validation, 2-min background accuracy, responsive layout). At the user's direction the browser test was deferred and performed alongside plan 02-02's checklist on the live GitHub Pages deploy. **User approved 2026-06-04** — all checklist items green.
 
 ## User Setup Required
 None — no external service configuration required.
